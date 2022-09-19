@@ -1,3 +1,5 @@
+use gloo_net::http::Request;
+use wasm_bindgen_futures;
 use yew::prelude::*;
 
 use crate::helper::js;
@@ -15,8 +17,14 @@ impl Component for TestComp {
     type Properties = ();
 
     fn create(_ctx: &Context<Self>) -> Self {
+        wasm_bindgen_futures::spawn_local(async move {
+            let get_body = Request::get("http://localhost:8081/test")
+                .send().await.unwrap()
+                .text().await.unwrap();
+            js::log_str(get_body);
+        });
         Self {
-            name: String::from("haha")
+            name: String::from("haheeeeea")
         }
     }
 
