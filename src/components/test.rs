@@ -36,5 +36,5 @@ impl Component for TestComp {
             <h1>{ &self.name }</h1>
             </div>
             }
-        }
+    }
 }
