@@ -1,4 +1,5 @@
 use gloo_net::http::Request;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures;
 use yew::prelude::*;
 
@@ -12,16 +13,21 @@ pub enum Msg {
     TestClick
 }
 
+#[derive(Clone, PartialEq, Deserialize, Serialize)]
+struct User {
+    message: String,
+}
+
 impl Component for TestComp {
     type Message = Msg;
     type Properties = ();
 
     fn create(_ctx: &Context<Self>) -> Self {
         wasm_bindgen_futures::spawn_local(async move {
-            let get_body = Request::get("http://localhost:8081/test")
+            let get_body: User = Request::get("http://localhost:8081/test")
                 .send().await.unwrap()
-                .text().await.unwrap();
-            js::log_str(get_body);
+                .json().await.unwrap();
+            js::log(&wasm_bindgen::JsValue::from_serde(&get_body).unwrap());
         });
         Self {
             name: String::from("haheeeeea")
