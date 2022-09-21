@@ -10,7 +10,9 @@ pub struct TestComp {
 }
 
 pub enum Msg {
-    TestClick
+    TestClick,
+    LoadUser,
+    LoadUserDone(Option<String>),
 }
 
 #[derive(Clone, PartialEq, Deserialize, Serialize)]
@@ -18,26 +20,44 @@ struct User {
     message: String,
 }
 
+async fn get_user() -> Result<String, wasm_bindgen::JsValue> {
+    let get_body: User = Request::get("http://localhost:8081/test")
+        .send().await.unwrap()
+        .json().await.unwrap();
+    Ok(get_body.message.to_string())
+}
+
 impl Component for TestComp {
     type Message = Msg;
     type Properties = ();
 
-    fn create(_ctx: &Context<Self>) -> Self {
-        wasm_bindgen_futures::spawn_local(async move {
-            let get_body: User = Request::get("http://localhost:8081/test")
-                .send().await.unwrap()
-                .json().await.unwrap();
-            js::log(&wasm_bindgen::JsValue::from_serde(&get_body).unwrap());
-        });
+    fn create(ctx: &Context<Self>) -> Self {
+        ctx.link().send_message(Msg::LoadUser);
         Self {
             name: String::from("haheeeeea")
         }
     }
 
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             Msg::TestClick => {
                 js::alert("按钮点击");
+                true
+            }
+            Msg::LoadUser => {
+                let f = async {
+                    match get_user().await {
+                        Ok(u) => Msg::LoadUserDone(Some(u)),
+                        Err(_) => Msg::LoadUserDone(Some("no data".to_string()))
+                    }
+                };
+                ctx.link().send_future(f);
+                true
+            }
+            Msg::LoadUserDone(data) => {
+                if let Some(u) = data {
+                    self.name = u;
+                }
                 true
             }
         }
