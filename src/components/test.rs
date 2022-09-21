@@ -4,8 +4,10 @@ use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures;
 use yew::prelude::*;
 
-use crate::apis::test::{load_ns_future, TestMsg};
+use crate::apis::test::TestMsg;
 use crate::helper::js;
+
+use super::selectns::NameSpaceSelect;
 
 pub struct TestComp {
     nslist: Vec<Namespace>,
@@ -23,7 +25,6 @@ impl Component for TestComp {
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_message(TestMsg::LoadNS);
         Self {
             nslist: vec![]
         }
@@ -35,27 +36,13 @@ impl Component for TestComp {
                 js::alert("按钮点击");
                 true
             }
-            TestMsg::LoadNS => {
-                ctx.link().send_future(load_ns_future());
-                true
-            }
-            TestMsg::LoadNSDone(data) => {
-                self.nslist = data;
-                true
-            }
         }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
             <div>
-             <select>
-              {for self.nslist.iter().map(|ns:&Namespace| html!{
-                <option value={ns.metadata.name.as_ref().unwrap().clone()}>
-                {ns.metadata.name.as_ref().unwrap().clone()}
-                </option>
-              })}
-            </select>
+            <NameSpaceSelect />
             <button onclick={ctx.link().callback(|_| TestMsg::TestClick)}>{"点我"}  </button>
             </div>
             }
