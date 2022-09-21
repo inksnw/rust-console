@@ -3,36 +3,31 @@ use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures;
 use yew::prelude::*;
 
+use crate::apis::test::{get_user_future, TestMsg, UserTrait};
 use crate::helper::js;
 
 pub struct TestComp {
     pub name: String,
 }
 
-pub enum Msg {
-    TestClick,
-    LoadUser,
-    LoadUserDone(Option<String>),
-}
 
 #[derive(Clone, PartialEq, Deserialize, Serialize)]
 struct User {
     message: String,
 }
 
-async fn get_user() -> Result<String, wasm_bindgen::JsValue> {
-    let get_body: User = Request::get("http://localhost:8081/test")
-        .send().await.unwrap()
-        .json().await.unwrap();
-    Ok(get_body.message.to_string())
+impl UserTrait for User {
+    fn get_name(self) -> String {
+        return self.message;
+    }
 }
 
 impl Component for TestComp {
-    type Message = Msg;
+    type Message = TestMsg;
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_message(Msg::LoadUser);
+        ctx.link().send_message(TestMsg::LoadUser);
         Self {
             name: String::from("haheeeeea")
         }
@@ -40,24 +35,16 @@ impl Component for TestComp {
 
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
-            Msg::TestClick => {
+            TestMsg::TestClick => {
                 js::alert("按钮点击");
                 true
             }
-            Msg::LoadUser => {
-                let f = async {
-                    match get_user().await {
-                        Ok(u) => Msg::LoadUserDone(Some(u)),
-                        Err(_) => Msg::LoadUserDone(Some("no data".to_string()))
-                    }
-                };
-                ctx.link().send_future(f);
+            TestMsg::LoadUser => {
+                ctx.link().send_future(get_user_future::<User>());
                 true
             }
-            Msg::LoadUserDone(data) => {
-                if let Some(u) = data {
-                    self.name = u;
-                }
+            TestMsg::LoadUserDone(data) => {
+                self.name = data;
                 true
             }
         }
@@ -66,7 +53,7 @@ impl Component for TestComp {
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
             <div>
-            <button onclick={ctx.link().callback(|_| Msg::TestClick)}>{"点我"}  </button>
+            <button onclick={ctx.link().callback(|_| TestMsg::TestClick)}>{"点我"}  </button>
             <h1>{ &self.name }</h1>
             </div>
             }
