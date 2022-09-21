@@ -5,6 +5,7 @@ use wasm_bindgen_futures;
 use yew::prelude::*;
 
 use crate::apis::test::TestMsg;
+use crate::elementui::base::ElInput;
 use crate::helper::js;
 
 use super::selectns::NameSpaceSelect;
@@ -43,6 +44,7 @@ impl Component for TestComp {
         html! {
             <div>
             <NameSpaceSelect />
+            <ElInput value="abc"/>
             <button onclick={ctx.link().callback(|_| TestMsg::TestClick)}>{"点我"}  </button>
             </div>
             }
