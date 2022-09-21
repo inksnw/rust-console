@@ -1,31 +1,34 @@
 use std::future::Future;
 
 use gloo_net::http::Request;
-
-pub trait UserTrait {
-    fn get_name(self) -> String;
-}
+use k8s_openapi::api::core::v1::Namespace;
 
 pub enum TestMsg {
     TestClick,
-    LoadUser,
-    LoadUserDone(String),
+    LoadNS,
+    LoadNSDone(Vec<Namespace>),
 }
 
-pub async fn get_user<T: serde::Serialize + serde::de::DeserializeOwned + Clone + PartialEq>() -> Result<T, wasm_bindgen::JsValue> {
-    let obj: T = Request::get(super::with_path("/test").as_str()).send().
+#[derive(serde::Deserialize)]
+// #[serde(rename(total_items = "totalItems"))]
+struct ApiResult {
+    total_items: u32,
+    items: Vec<Namespace>,
+}
+
+pub async fn load_ns() -> Result<Vec<Namespace>, wasm_bindgen::JsValue> {
+    let rv: ApiResult = Request::get(&super::name_space_api().as_str()).send().
         await.unwrap().json().await.unwrap();
-    Ok(obj)
+
+    Ok(rv.items)
 }
 
-pub fn get_user_future<T>() -> impl Future<Output=TestMsg> + 'static
-    where
-        T: serde::Serialize + serde::de::DeserializeOwned + Clone + PartialEq + UserTrait
+pub fn load_ns_future() -> impl Future<Output=TestMsg> + 'static
 {
     let f = async {
-        match get_user::<T>().await {
-            Ok(user) => TestMsg::LoadUserDone(user.get_name()),
-            Err(_) => TestMsg::LoadUserDone("no data".to_string())
+        match load_ns().await {
+            Ok(nslist) => TestMsg::LoadNSDone(nslist),
+            Err(_) => TestMsg::LoadNSDone(vec![])
         }
     };
     return f;
