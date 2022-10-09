@@ -1,6 +1,8 @@
 use gloo::console::log;
 use k8s_openapi::api::core::v1::Namespace;
 use serde::{Deserialize, Serialize};
+use stylist::Style;
+use stylist::yew::{styled_component, styled_component_impl};
 use yew::{Context, Html, html};
 use yew::prelude::Component;
 
@@ -20,6 +22,8 @@ struct MyObject {
     user_name: String,
     age: u32,
 }
+
+const STYLE: &str = include_str!("main.css");
 
 impl Component for TestComp {
     type Message = TestMsg;
@@ -51,9 +55,10 @@ impl Component for TestComp {
         let class_name = "my_title";
         let items = vec!["xiao hong", "xiao ming"];
 
+        let stylesheet = Style::new(STYLE).unwrap();
 
         html! {
-            <div>
+            <div class={stylesheet}>
             <ul class="item-list">
             {  list_to_html(items) }
             </ul>
