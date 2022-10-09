@@ -1,5 +1,5 @@
-use yew::{html, Properties};
-use yew::prelude::*;
+use yew::{Context, Html, html, Properties};
+use yew::prelude::Component;
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct InputProps {

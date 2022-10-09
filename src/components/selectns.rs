@@ -11,7 +11,7 @@ pub struct NamespaceProps {
 }
 
 pub struct NameSpaceSelect {
-    nslist: Vec<Namespace>,
+    ns_list: Vec<Namespace>,
 }
 
 impl Component for NameSpaceSelect {
@@ -20,7 +20,7 @@ impl Component for NameSpaceSelect {
 
     fn create(ctx: &Context<Self>) -> Self {
         ctx.link().send_message(NamespaceMsg::LoadNS);
-        Self { nslist: vec![] }
+        Self { ns_list: vec![] }
     }
 
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
@@ -30,7 +30,7 @@ impl Component for NameSpaceSelect {
                 true
             }
             NamespaceMsg::LoadNSDone(data) => {
-                self.nslist = data;
+                self.ns_list = data;
                 true
             }
         }
@@ -41,7 +41,7 @@ impl Component for NameSpaceSelect {
         <div>
         <select disabled={ctx.props().disabled}>
         {
-            for self.nslist.iter().map(|ns:&Namespace|html!{
+            for self.ns_list.iter().map(|ns:&Namespace|html!{
                 <option value={ns.metadata.name.as_ref().unwrap().clone()}>
                 {ns.metadata.name.as_ref().unwrap().clone()}
                 </option>

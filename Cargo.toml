@@ -6,6 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+gloo = "0.8.0"
 yew = "0.19"
 wasm-bindgen = "0.2.82"
 #wasm-bindgen-futures 实现前端中的Promise
@@ -13,7 +14,8 @@ wasm-bindgen-futures = "0.4.33"
 gloo-net = "0.2.4"
 #serde用于序列化和反序列化
 serde = { version = "1.0.144", features = ["derive"] }
-k8s-openapi = { version = "0.15.0", features = ["v1_24"] }
+serde_json = "1.0.85"
+k8s-openapi = { version = "0.16.0", features = ["v1_24"] }
 [dependencies.web-sys]
 version = "0.3.60"
 feacures = ['Document', 'Element', 'HtmlElement', 'Node', 'Window']

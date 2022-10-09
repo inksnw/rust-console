@@ -1,5 +1,8 @@
+use gloo::console::log;
 use k8s_openapi::api::core::v1::Namespace;
-use yew::prelude::*;
+use serde::{Deserialize, Serialize};
+use yew::{Context, Html, html};
+use yew::prelude::Component;
 
 use crate::apis::test::TestMsg;
 use crate::element_ui::base::ElInput;
@@ -12,6 +15,11 @@ pub struct TestComp {
     ns_list: Vec<Namespace>,
 }
 
+#[derive(Serialize, Deserialize)]
+struct MyObject {
+    user_name: String,
+    age: u32,
+}
 
 impl Component for TestComp {
     type Message = TestMsg;
@@ -33,6 +41,13 @@ impl Component for TestComp {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
+        let name = "haha";
+        log!(name);
+        let my_obj = MyObject {
+            user_name: name.to_owned(),
+            age: 12,
+        };
+        log!(serde_json::to_string_pretty(&my_obj).unwrap());
         html! {
             <div>
             <NameSpaceSelect />

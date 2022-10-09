@@ -25,7 +25,7 @@ pub fn load_ns_future() -> impl Future<Output=NamespaceMsg> + 'static
 {
     let f = async {
         match load_ns().await {
-            Ok(nslist) => NamespaceMsg::LoadNSDone(nslist),
+            Ok(ns_list) => NamespaceMsg::LoadNSDone(ns_list),
             Err(_) => NamespaceMsg::LoadNSDone(vec![])
         }
     };
