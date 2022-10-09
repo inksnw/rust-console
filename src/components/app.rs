@@ -49,10 +49,16 @@ impl Component for TestComp {
         };
         log!(serde_json::to_string_pretty(&my_obj).unwrap());
         let class_name = "my_title";
+        let items = vec!["xiao hong", "xiao ming"];
+
+
         html! {
             <div>
+            <ul class="item-list">
+            {  list_to_html(items) }
+            </ul>
             <h1 class="title">{"这是一个标题"}</h1>
-            if class=="my_title"{
+            if class_name=="my_title"{
                 <p>{"hi there"}</p>
             }
             <NameSpaceSelect />
@@ -61,4 +67,8 @@ impl Component for TestComp {
             </div>
         }
     }
+}
+
+fn list_to_html(list: Vec<&str>) -> Vec<Html> {
+    list.iter().map(|item| html! {<li>{item}</li>}).collect()
 }
