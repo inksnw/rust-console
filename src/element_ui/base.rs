@@ -14,7 +14,7 @@ pub struct InputProps {
 pub enum ElInputMsg {}
 
 pub struct ElInput {
-    text: String,
+    value: String,
 }
 
 impl Component for ElInput {
@@ -22,7 +22,9 @@ impl Component for ElInput {
     type Properties = InputProps;
 
     fn create(ctx: &Context<Self>) -> Self {
-        Self { text: ctx.props().value.clone() }
+        Self {
+            value: ctx.props().value.clone()
+        }
     }
 
     fn update(&mut self, _ctx: &Context<Self>, _msg: Self::Message) -> bool {
@@ -33,7 +35,7 @@ impl Component for ElInput {
         html! {
         <div class="el-input">
             <input disabled={ctx.props().disabled}
-            value={self.text.clone()}
+            value={self.value.clone()}
             class="el-input__inner"
             placeholder={ctx.props().placeholder.clone()}/>
         </div>

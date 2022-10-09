@@ -2,7 +2,7 @@ use gloo::console::log;
 use k8s_openapi::api::core::v1::Namespace;
 use serde::{Deserialize, Serialize};
 use stylist::Style;
-use stylist::yew::{styled_component, styled_component_impl};
+
 use yew::{Context, Html, html};
 use yew::prelude::Component;
 
