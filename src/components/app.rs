@@ -48,12 +48,17 @@ impl Component for TestComp {
             age: 12,
         };
         log!(serde_json::to_string_pretty(&my_obj).unwrap());
+        let class_name = "my_title";
         html! {
             <div>
+            <h1 class="title">{"这是一个标题"}</h1>
+            if class=="my_title"{
+                <p>{"hi there"}</p>
+            }
             <NameSpaceSelect />
             <ElInput value="abc"/>
             <button onclick={ctx.link().callback(|_| TestMsg::TestClick)}>{"点我"}  </button>
             </div>
-            }
+        }
     }
 }
