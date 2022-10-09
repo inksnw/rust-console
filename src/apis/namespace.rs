@@ -10,7 +10,7 @@ pub enum NamespaceMsg {
 
 #[derive(serde::Deserialize)]
 struct ApiResult {
-    total_items: u32,
+    // total_items: u32,
     items: Vec<Namespace>,
 }
 

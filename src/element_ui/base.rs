@@ -1,5 +1,4 @@
-use web_sys::{HtmlElement, HtmlInputElement};
-use yew::{events::InputEvent, html, Properties};
+use yew::{html, Properties};
 use yew::prelude::*;
 
 #[derive(Properties, Clone, PartialEq)]
@@ -26,7 +25,7 @@ impl Component for ElInput {
         Self { text: ctx.props().value.clone() }
     }
 
-    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
+    fn update(&mut self, _ctx: &Context<Self>, _msg: Self::Message) -> bool {
         true
     }
 

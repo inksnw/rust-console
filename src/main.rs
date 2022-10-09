@@ -3,7 +3,7 @@ use components::app::TestComp;
 mod components;
 mod helper;
 mod apis;
-mod elementui;
+mod element_ui;
 
 fn main() {
     yew::start_app::<TestComp>();

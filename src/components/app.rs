@@ -1,23 +1,15 @@
-use gloo_net::http::Request;
 use k8s_openapi::api::core::v1::Namespace;
-use serde::{Deserialize, Serialize};
-use wasm_bindgen_futures;
 use yew::prelude::*;
 
 use crate::apis::test::TestMsg;
-use crate::elementui::base::ElInput;
+use crate::element_ui::base::ElInput;
 use crate::helper::js;
 
 use super::selectns::NameSpaceSelect;
 
+#[allow(dead_code)]
 pub struct TestComp {
-    nslist: Vec<Namespace>,
-}
-
-
-#[derive(Clone, PartialEq, Deserialize, Serialize)]
-struct User {
-    nslist: Vec<Namespace>,
+    ns_list: Vec<Namespace>,
 }
 
 
@@ -25,13 +17,13 @@ impl Component for TestComp {
     type Message = TestMsg;
     type Properties = ();
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            nslist: vec![]
+            ns_list: vec![]
         }
     }
 
-    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
+    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             TestMsg::TestClick => {
                 js::alert("按钮点击");
