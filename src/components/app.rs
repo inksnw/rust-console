@@ -1,5 +1,4 @@
 use gloo::console::log;
-use k8s_openapi::api::core::v1::Namespace;
 use serde::{Deserialize, Serialize};
 use stylist::Style;
 use yew::{Context, Html, html};
@@ -12,7 +11,7 @@ use crate::helper::js;
 use super::selectns::NameSpaceSelect;
 
 #[allow(dead_code)]
-pub struct TestComp {
+pub struct Resource {
     myname: String,
     ns: String,
 }
@@ -25,7 +24,7 @@ struct MyObject {
 
 const STYLE: &str = include_str!("main.css");
 
-impl Component for TestComp {
+impl Component for Resource {
     type Message = AppMsg;
     type Properties = ();
 

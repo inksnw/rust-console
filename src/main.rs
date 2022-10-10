@@ -1,10 +1,11 @@
-use components::app::TestComp;
+use router::MyRoute;
 
-mod components;
+pub mod components;
 mod helper;
 mod apis;
 mod element_ui;
+mod router;
 
 fn main() {
-    yew::start_app::<TestComp>();
+    yew::start_app::<MyRoute>();
 }
