@@ -2,19 +2,19 @@ use gloo::console::log;
 use k8s_openapi::api::core::v1::Namespace;
 use serde::{Deserialize, Serialize};
 use stylist::Style;
-
 use yew::{Context, Html, html};
 use yew::prelude::Component;
 
-use crate::apis::test::TestMsg;
-use crate::element_ui::base::ElInput;
+use crate::apis::app::AppMsg;
+use crate::element_ui::el_input::ElInput;
 use crate::helper::js;
 
 use super::selectns::NameSpaceSelect;
 
 #[allow(dead_code)]
 pub struct TestComp {
-    ns_list: Vec<Namespace>,
+    myname: String,
+    ns: String,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -26,22 +26,29 @@ struct MyObject {
 const STYLE: &str = include_str!("main.css");
 
 impl Component for TestComp {
-    type Message = TestMsg;
+    type Message = AppMsg;
     type Properties = ();
 
     fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            ns_list: vec![]
+            myname: String::from("test_name"),
+            ns: String::new(),
         }
     }
 
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
-            TestMsg::TestClick => {
+            AppMsg::TestClick => {
                 js::alert("按钮点击");
-                true
+            }
+            AppMsg::UpdateMyName(newvalue) => {
+                self.myname = newvalue;
+            }
+            AppMsg::UpdateNs(newvalue) => {
+                self.ns = newvalue.value;
             }
         }
+        true
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
@@ -67,8 +74,13 @@ impl Component for TestComp {
                 <p>{"hi there"}</p>
             }
             <NameSpaceSelect />
-            <ElInput value="abc"/>
-            <button onclick={ctx.link().callback(|_| TestMsg::TestClick)}>{"点我"}  </button>
+            <ElInput value={self.myname.clone()}
+            onchange={ctx.link().callback(AppMsg::UpdateMyName)}
+            />
+            <button onclick={ctx.link().callback(|_| AppMsg::TestClick)}>{"点我"}  </button>
+            <h3>{"文本框的内容是"} {self.myname.clone()}</h3>
+
+
             </div>
         }
     }

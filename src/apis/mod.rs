@@ -1,4 +1,4 @@
-pub mod test;
+pub mod app;
 pub mod namespace;
 
 const BASE_URL: &str = "http://localhost:9090";
