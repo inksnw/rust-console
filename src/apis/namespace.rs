@@ -3,9 +3,12 @@ use std::future::Future;
 use gloo_net::http::Request;
 use k8s_openapi::api::core::v1::Namespace;
 
+use crate::element_ui::ValueText;
+
 pub enum NamespaceMsg {
     LoadNS,
     LoadNSDone(Vec<Namespace>),
+    Onchange(ValueText),
 }
 
 #[derive(serde::Deserialize)]

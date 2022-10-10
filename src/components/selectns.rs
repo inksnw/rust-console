@@ -3,11 +3,14 @@ use yew::prelude::*;
 use yew::Properties;
 
 use crate::apis::namespace::*;
+use crate::element_ui::el_select::ElSelect;
+use crate::element_ui::ValueText;
 
 #[derive(Properties, PartialEq)]
 pub struct NamespaceProps {
     #[prop_or(false)]
     pub disabled: bool,
+    pub onchange: Option<Callback<ValueText>>,
 }
 
 pub struct NameSpaceSelect {
@@ -27,28 +30,37 @@ impl Component for NameSpaceSelect {
         match msg {
             NamespaceMsg::LoadNS => {
                 ctx.link().send_future(load_ns_future());
-                true
             }
             NamespaceMsg::LoadNSDone(data) => {
                 self.ns_list = data;
-                true
+            }
+            NamespaceMsg::Onchange(vt) => {
+                if let Some(call) = ctx.props().onchange.clone() {
+                    call.emit(vt);
+                }
             }
         }
+        true
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
-        <div>
-        <select disabled={ctx.props().disabled}>
-        {
-            for self.ns_list.iter().map(|ns:&Namespace|html!{
-                <option value={ns.metadata.name.as_ref().unwrap().clone()}>
-                {ns.metadata.name.as_ref().unwrap().clone()}
-                </option>
-        })
-        }
-        </select>
-        </div>
-        }
+          <div>
+          {self.render_select(ctx)}
+          </div>
+      }
+    }
+}
+
+impl NameSpaceSelect {
+    fn render_select(&self, ctx: &Context<Self>) -> Html {
+        let nsdata = self.ns_list.iter().
+            map(|ns: &Namespace| ValueText {
+                value: ns.metadata.name.as_ref().unwrap().clone(),
+                text: ns.metadata.name.as_ref().unwrap().clone(),
+            }).collect::<Vec<ValueText>>();
+        html! {
+        <ElSelect data={nsdata} onchange={ctx.link().callback(NamespaceMsg::Onchange)} />
+      }
     }
 }

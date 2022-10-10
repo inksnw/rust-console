@@ -73,12 +73,13 @@ impl Component for TestComp {
             if class_name=="my_title"{
                 <p>{"hi there"}</p>
             }
-            <NameSpaceSelect />
+            <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElInput value={self.myname.clone()}
             onchange={ctx.link().callback(AppMsg::UpdateMyName)}
             />
             <button onclick={ctx.link().callback(|_| AppMsg::TestClick)}>{"点我"}  </button>
             <h3>{"文本框的内容是"} {self.myname.clone()}</h3>
+            <h3>{"选了ns是:"}{self.ns.clone()}</h3>
 
 
             </div>
