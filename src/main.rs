@@ -8,5 +8,4 @@ mod router;
 
 fn main() {
     yew::start_app::<MyRoute>();
-
 }

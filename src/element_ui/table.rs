@@ -15,7 +15,6 @@ pub struct TableProps {
     #[prop_or_default]
     pub data: Vec<serde_json::Value>,
 
-
 }
 
 
@@ -30,58 +29,50 @@ impl Component for ElTable {
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
 
-    <div class="el-table--fit el-table--striped el-table--enable-row-hover el-table--enable-row-transition el-table el-table--layout-fixed is-scrolling-none"
-         data-prefix="el"  style="width: 100%;">
-        <div class="el-table__inner-wrapper">
-            <div class="el-table__header-wrapper">
-                <table class="el-table__header" border="0" cellpadding="0" cellspacing="0" style="width: 806px;">
-                    <colgroup>
-                      {
-                        for ctx.props().children.iter().map(|item|{
-                            html!{<col width={item.props.width.clone()}/>}
-                            })
-                      }
 
+        <div class="el-table el-table--fit el-table--striped el-table--enable-row-hover el-table--enable-row-transition"
+             style="width: 100%;">
+            <div class="hidden-columns">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="el-table__header-wrapper">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width: 497px;">
+                    <colgroup>
+                        {
+                        for ctx.props().children.iter().map(|item|{
+                        html!{<col width={item.props.width.clone()}/>}
+                        })
+                        }
                     </colgroup>
-                    <thead class="">
+                    <thead class="has-gutter">
                     <tr class="">
-                       {
-                           for ctx.props().children.iter()
-                       }
+                        {
+                        for ctx.props().children.iter()
+                        }
                     </tr>
                     </thead>
                 </table>
             </div>
-            <div class="el-table__body-wrapper">
-                <div class="el-scrollbar">
-                    <div class="el-scrollbar__wrap el-scrollbar__wrap--hidden-default">
-                        <div class="el-scrollbar__view" style="display: inline-block; vertical-align: middle;">
-                            <table class="el-table__body" cellspacing="0" cellpadding="0" border="0"
-                                   style="table-layout: fixed; width: 806px;">
-                                <colgroup>
-                                   {
-                                    for ctx.props().children.iter().map(|item|{
-                                        html!{<col width={item.props.width.clone()}/>}
-                                        })
-                                  }
-                                </colgroup>
-                                <tbody>
-                                { self.render_row(ctx) }
+            <div class="el-table__body-wrapper is-scrolling-none">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width: 497px;">
+                    <colgroup>
+                        {
+                        for ctx.props().children.iter().map(|item|{
+                        html!{<col width={item.props.width.clone()}/>}
+                        })
+                        }
+                    </colgroup>
+                    <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="el-scrollbar__bar is-horizontal" style="display: none;">
-                        <div class="el-scrollbar__thumb" style="transform: translateX(0%);"></div>
-                    </div>
-                    <div class="el-scrollbar__bar is-vertical" style="display: none;">
-                        <div class="el-scrollbar__thumb" style="transform: translateY(0%);"></div>
-                    </div>
-                </div>
+                    { self.render_row(ctx) }
+
+                    </tbody>
+                </table>
             </div>
+            <div class="el-table__column-resize-proxy" style="display: none;"></div>
         </div>
-    </div>
 
         }
     }
@@ -92,11 +83,11 @@ impl ElTable {
     pub fn render_row(&self, ctx: &Context<Self>) -> Html {
         ctx.props().data.as_slice().iter().map(|row: &serde_json::Value| {
             html! {
-                    <tr class="el-table__row el-table__row--striped">
+                    <tr class="el-table__row">
                     {
                         ctx.props().children.iter().enumerate().map(|(i,item)|{
                         self.render_cell(row,item.props.prop.clone())
-                    }).collect::<Html>()
+                        }).collect::<Html>()
                     }
                     </tr>}
         }).collect::<Html>()
@@ -104,10 +95,10 @@ impl ElTable {
     fn render_cell(&self, row: &serde_json::Value, prop: String) -> Html {
         let empty_value = serde_json::Value::String(String::new());
         html! {
-            <td class="el-table_2_column_6 el-table__cell" rowspan="1" colspan="1">
+            <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
             <div class="cell">
-            {row.get(prop).unwrap_or(&empty_value).
-            as_str().unwrap_or("--")
+            {
+                row.get(prop).unwrap_or(&empty_value).as_str().unwrap_or("--")
             }
             </div>
             </td>
