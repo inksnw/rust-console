@@ -1,3 +1,4 @@
+use serde_json;
 use yew::{html, Properties};
 use yew::prelude::*;
 
@@ -11,6 +12,10 @@ pub struct TableProps {
     pub width: String,
     #[prop_or_default]
     pub children: ChildrenWithProps<ElTableColumn>,
+    #[prop_or_default]
+    pub data: Vec<serde_json::Value>,
+
+
 }
 
 
@@ -61,28 +66,7 @@ impl Component for ElTable {
                                   }
                                 </colgroup>
                                 <tbody>
-                                <tr class="el-table__row">
-                                    <td class="el-table_2_column_4 el-table__cell" rowspan="1" colspan="1">
-                                        <div class="cell">{"2016-05-03"}</div>
-                                    </td>
-                                    <td class="el-table_2_column_5 el-table__cell" rowspan="1" colspan="1">
-                                        <div class="cell">{"Tom"}</div>
-                                    </td>
-                                    <td class="el-table_2_column_6 el-table__cell" rowspan="1" colspan="1">
-                                        <div class="cell">{"No. 189, Grove St, Los Angeles"}</div>
-                                    </td>
-                                </tr>
-                                <tr class="el-table__row el-table__row--striped">
-                                    <td class="el-table_2_column_4 el-table__cell" rowspan="1" colspan="1">
-                                        <div class="cell">{"2016-05-02"}</div>
-                                    </td>
-                                    <td class="el-table_2_column_5 el-table__cell" rowspan="1" colspan="1">
-                                        <div class="cell">{"Tom"}</div>
-                                    </td>
-                                    <td class="el-table_2_column_6 el-table__cell" rowspan="1" colspan="1">
-                                        <div class="cell">{"No. 189, Grove St, Los Angeles"}</div>
-                                    </td>
-                                </tr>
+                                { self.render_row(ctx) }
 
                                 </tbody>
                             </table>
@@ -103,6 +87,34 @@ impl Component for ElTable {
     }
 }
 
+impl ElTable {
+    //遍历行
+    pub fn render_row(&self, ctx: &Context<Self>) -> Html {
+        ctx.props().data.as_slice().iter().map(|row: &serde_json::Value| {
+            html! {
+                    <tr class="el-table__row el-table__row--striped">
+                    {
+                        ctx.props().children.iter().enumerate().map(|(i,item)|{
+                        self.render_cell(row,item.props.prop.clone())
+                    }).collect::<Html>()
+                    }
+                    </tr>}
+        }).collect::<Html>()
+    }
+    fn render_cell(&self, row: &serde_json::Value, prop: String) -> Html {
+        let empty_value = serde_json::Value::String(String::new());
+        html! {
+            <td class="el-table_2_column_6 el-table__cell" rowspan="1" colspan="1">
+            <div class="cell">
+            {row.get(prop).unwrap_or(&empty_value).
+            as_str().unwrap_or("--")
+            }
+            </div>
+            </td>
+        }
+    }
+}
+
 pub struct ElTableColumn {}
 
 #[derive(PartialEq, Properties)]
@@ -111,6 +123,8 @@ pub struct TableColumnProps {
     pub width: String,
     #[prop_or_default]
     pub label: String,
+    #[prop_or_default]
+    pub prop: String,
 }
 
 impl Component for ElTableColumn {

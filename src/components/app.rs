@@ -65,6 +65,22 @@ impl Component for Resource {
 
         let stylesheet = Style::new(STYLE).unwrap();
 
+        let test_json = r#"
+        [
+    {
+        "name": "nginx",
+        "version": "1.1",
+        "ns": "n1"
+    },
+    {
+        "name": "nginx2",
+        "version": "1.2",
+        "ns": "n2"
+    }
+]
+        "#;
+        let data: Vec<serde_json::Value> = serde_json::from_str(test_json).unwrap();
+
         html! {
             <div class={stylesheet}>
             <ul class="item-list">
@@ -82,10 +98,10 @@ impl Component for Resource {
             <h3>{"文本框的内容是"} {self.myname.clone()}</h3>
             <h3>{"选了ns是:"}{self.ns.clone()}</h3>
 
-            <ElTable width={"100%"}>
-            <ElTableColumn label="pod名"/>
-            <ElTableColumn label="名称空间"/>
-            <ElTableColumn label="状态"/>
+            <ElTable width={"100%"} data={data}>
+            <ElTableColumn label="pod名" prop="name"/>
+            <ElTableColumn label="名称空间" prop="version"/>
+            <ElTableColumn label="状态" prop="ns"/>
             </ElTable>
             </div>
         }
