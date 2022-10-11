@@ -3,7 +3,7 @@ use yew::prelude::*;
 use yew::Properties;
 
 use crate::apis::namespace::*;
-use crate::element_ui::el_select::ElSelect;
+use crate::element_ui::select::ElSelect;
 use crate::element_ui::ValueText;
 
 #[derive(Properties, PartialEq)]

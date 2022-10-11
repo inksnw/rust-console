@@ -1,5 +1,6 @@
-pub(crate) mod el_input;
-pub(crate) mod el_select;
+pub(crate) mod input;
+pub(crate) mod select;
+pub(crate) mod table;
 
 
 #[derive(Debug, Clone, PartialEq)]

@@ -5,7 +5,9 @@ use yew::{Context, Html, html};
 use yew::prelude::Component;
 
 use crate::apis::app::AppMsg;
-use crate::element_ui::el_input::ElInput;
+use crate::element_ui::input::ElInput;
+use crate::element_ui::table::ElTable;
+use crate::element_ui::table::ElTableColumn;
 use crate::helper::js;
 
 use super::selectns::NameSpaceSelect;
@@ -80,7 +82,11 @@ impl Component for Resource {
             <h3>{"文本框的内容是"} {self.myname.clone()}</h3>
             <h3>{"选了ns是:"}{self.ns.clone()}</h3>
 
-
+            <ElTable width={"100%"}>
+            <ElTableColumn label="pod名"/>
+            <ElTableColumn label="名称空间"/>
+            <ElTableColumn label="状态"/>
+            </ElTable>
             </div>
         }
     }
