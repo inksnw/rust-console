@@ -11,17 +11,11 @@ pub enum NamespaceMsg {
     Onchange(ValueText),
 }
 
-#[derive(serde::Deserialize)]
-struct ApiResult {
-    // total_items: u32,
-    items: Vec<Namespace>,
-}
 
 pub async fn load_ns() -> Result<Vec<Namespace>, wasm_bindgen::JsValue> {
-    let rv: ApiResult = Request::get(&super::name_space_api().as_str()).send().
+    let rv = Request::get(&super::name_space_api().as_str()).send().
         await.unwrap().json().await.unwrap();
-
-    Ok(rv.items)
+    Ok(rv)
 }
 
 pub fn load_ns_future() -> impl Future<Output=NamespaceMsg> + 'static

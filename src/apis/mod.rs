@@ -10,3 +10,14 @@ pub fn with_path(p: &str) -> String {
 pub fn name_space_api() -> String {
     with_path("/kapis/namespaces")
 }
+
+pub fn pods_api(ns: Option<String>) -> String {
+    match ns {
+        None => with_path("/kapis/namespaces/default/pods"),
+        Some(s) => {
+            with_path(
+                &format!("/kapis/namespaces/{}/pods", s)
+            )
+        }
+    }
+}

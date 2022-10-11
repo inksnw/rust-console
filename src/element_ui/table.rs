@@ -1,4 +1,5 @@
 use serde_json;
+use serde_json::Value;
 use yew::{html, Properties};
 use yew::prelude::*;
 
@@ -13,7 +14,7 @@ pub struct TableProps {
     #[prop_or_default]
     pub children: ChildrenWithProps<ElTableColumn>,
     #[prop_or_default]
-    pub data: Vec<serde_json::Value>,
+    pub data: Vec<Value>,
 
 }
 
@@ -81,28 +82,51 @@ impl Component for ElTable {
 impl ElTable {
     //遍历行
     pub fn render_row(&self, ctx: &Context<Self>) -> Html {
-        ctx.props().data.as_slice().iter().map(|row: &serde_json::Value| {
+        ctx.props().data.as_slice().iter().map(|row: &Value| {
             html! {
                     <tr class="el-table__row">
                     {
-                        ctx.props().children.iter().enumerate().map(|(i,item)|{
+                        ctx.props().children.iter().enumerate().map(|(_i,item)|{
                         self.render_cell(row,item.props.prop.clone())
                         }).collect::<Html>()
                     }
                     </tr>}
         }).collect::<Html>()
     }
-    fn render_cell(&self, row: &serde_json::Value, prop: String) -> Html {
-        let empty_value = serde_json::Value::String(String::new());
+    fn render_cell(&self, row: &Value, prop: String) -> Html {
+        let empty_value = Value::String(String::new());
         html! {
             <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
             <div class="cell">
             {
-                row.get(prop).unwrap_or(&empty_value).as_str().unwrap_or("--")
+                self.get_json_value(prop,row,&empty_value)
             }
             </div>
             </td>
         }
+    }
+
+    fn get_json_value(&self, query: String, data: &Value, empty: &Value) -> String {
+
+
+        let query_list: Vec<&str> = query.split(".").collect();
+        if query_list.len() <= 0 {
+            "--".to_string();
+        }
+        let mut first: Option<&Value> = data.get(query_list.get(0).unwrap());
+        query_list.iter().enumerate().for_each(|(i, key)| {
+            if i > 0 {
+                match key.parse::<usize>() {
+                    Ok(k) => {
+                        first = first.and_then(|v| v.get(k));
+                    }
+                    _ => {
+                        first = first.and_then(|v| v.get(key));
+                    }
+                }
+            }
+        });
+        return first.unwrap_or(empty).as_str().unwrap_or("--").to_string();
     }
 }
 

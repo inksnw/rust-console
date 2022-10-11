@@ -4,7 +4,7 @@ use stylist::Style;
 use yew::{Context, Html, html};
 use yew::prelude::Component;
 
-use crate::apis::app::AppMsg;
+use crate::apis::app::{AppMsg, load_pods_future};
 use crate::element_ui::input::ElInput;
 use crate::element_ui::table::ElTable;
 use crate::element_ui::table::ElTableColumn;
@@ -16,6 +16,7 @@ use super::selectns::NameSpaceSelect;
 pub struct Resource {
     myname: String,
     ns: String,
+    pods: Vec<serde_json::Value>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -30,10 +31,12 @@ impl Component for Resource {
     type Message = AppMsg;
     type Properties = ();
 
-    fn create(_ctx: &Context<Self>) -> Self {
+    fn create(ctx: &Context<Self>) -> Self {
+        ctx.link().send_future(load_pods_future(Some("kube-system".to_string())));
         Self {
             myname: String::from("test_name"),
             ns: String::new(),
+            pods: vec![],
         }
     }
 
@@ -47,6 +50,9 @@ impl Component for Resource {
             }
             AppMsg::UpdateNs(newvalue) => {
                 self.ns = newvalue.value;
+            }
+            AppMsg::LoadPodsDone(pods_str) => {
+                self.pods = serde_json::from_str(pods_str.as_str()).unwrap();
             }
         }
         true
@@ -65,21 +71,6 @@ impl Component for Resource {
 
         let stylesheet = Style::new(STYLE).unwrap();
 
-        let test_json = r#"
-        [
-    {
-        "name": "nginx",
-        "version": "1.1",
-        "ns": "n1"
-    },
-    {
-        "name": "nginx2",
-        "version": "1.2",
-        "ns": "n2"
-    }
-]
-        "#;
-        let data: Vec<serde_json::Value> = serde_json::from_str(test_json).unwrap();
 
         html! {
             <div class={stylesheet}>
@@ -98,10 +89,11 @@ impl Component for Resource {
             <h3>{"文本框的内容是"} {self.myname.clone()}</h3>
             <h3>{"选了ns是:"}{self.ns.clone()}</h3>
 
-            <ElTable width={"100%"} data={data}>
-            <ElTableColumn label="pod名" prop="name"/>
-            <ElTableColumn label="名称空间" prop="version"/>
-            <ElTableColumn label="状态" prop="ns"/>
+            <ElTable width={"100%"} data={self.pods.clone()}>
+            <ElTableColumn label="pod名" prop="metadata.name" width="200"/>
+            <ElTableColumn label="名称空间" prop="metadata.namespace"/>
+            <ElTableColumn label="状态" prop="status.phase"/>
+            <ElTableColumn label="IP" prop="status.podIP" width="200"/>
             </ElTable>
             </div>
         }
@@ -111,3 +103,4 @@ impl Component for Resource {
 fn list_to_html(list: Vec<&str>) -> Vec<Html> {
     list.iter().map(|item| html! {<li>{item}</li>}).collect()
 }
+
