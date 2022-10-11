@@ -1,11 +1,8 @@
-use gloo::console::log;
 use serde::{Deserialize, Serialize};
-use stylist::Style;
 use yew::{Context, Html, html};
 use yew::prelude::Component;
 
 use crate::apis::app::{AppMsg, load_pods_future};
-use crate::element_ui::input::ElInput;
 use crate::element_ui::table::ElTable;
 use crate::element_ui::table::ElTableColumn;
 use crate::helper::js;
@@ -25,7 +22,6 @@ struct MyObject {
     age: u32,
 }
 
-const STYLE: &str = include_str!("main.css");
 
 impl Component for Resource {
     type Message = AppMsg;
@@ -63,8 +59,8 @@ impl Component for Resource {
         html! {
             <div>
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
-            <ElInput value={self.myname.clone()} onchange={ctx.link().callback(AppMsg::UpdateMyName)} />
-            <button onclick={ctx.link().callback(|_| AppMsg::TestClick)}>{"点我"}  </button>
+            // <ElInput value={self.myname.clone()} onchange={ctx.link().callback(AppMsg::UpdateMyName)} />
+            // <button onclick={ctx.link().callback(|_| AppMsg::TestClick)}>{"点我"}  </button>
 
             <ElTable width={"100%"} data={self.pods.clone()}>
             <ElTableColumn label="pod名" prop="metadata.name" width="200"/>

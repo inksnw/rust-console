@@ -1,4 +1,3 @@
-use yew::html::Scope;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -16,42 +15,36 @@ enum Route {
 
 fn switch(routes: &Route) -> Html {
     match routes {
-        Route::Home => html! { <Resource/> },
-        Route::NotFound => html! { <h1>{ "404" }</h1> },
+        Route::Home => html! {
+            <div style="margin-left: 200px;height: 100%;" >
+            <Resource/>
+            </div>
+            },
+        Route::NotFound => html! {
+             <div style="margin-left: 200px;height: 100%;">
+             <h1>{ "404" }</h1>
+             </div>
+            }
     }
 }
 
-pub enum Msg {
-    ToggleNavbar,
-}
+pub enum Msg {}
 
-pub(crate) struct MyRoute {
-    navbar_active: bool,
-}
+pub(crate) struct MyRoute {}
 
 impl Component for MyRoute {
     type Message = Msg;
     type Properties = ();
 
     fn create(_ctx: &Context<Self>) -> Self {
-        Self {
-            navbar_active: false,
-        }
+        Self {}
     }
 
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            Msg::ToggleNavbar => {
-                self.navbar_active = !self.navbar_active;
-                true
-            }
-        }
-    }
 
-    fn view(&self, ctx: &Context<Self>) -> Html {
+    fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {
         <BrowserRouter>
-            { self.view_nav(ctx.link()) }
+            { self.view_nav() }
             <Switch<Route> render={Switch::render(switch)} />
         </BrowserRouter>
         }
@@ -59,33 +52,20 @@ impl Component for MyRoute {
 }
 
 impl MyRoute {
-    fn view_nav(&self, link: &Scope<Self>) -> Html {
-        let Self { navbar_active, .. } = *self;
-
-        let active_class = if !navbar_active { "is-active" } else { "" };
-
+    fn view_nav(&self) -> Html {
         html! {
-            <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand">
-                    <h1 class="navbar-item is-size-3">{ "Yew Blog" }</h1>
-                    <button class={classes!("navbar-burger", "burger", active_class)}
-                        aria-label="menu" aria-expanded="false"
-                        onclick={link.callback(|_| Msg::ToggleNavbar)}
-                    >
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class={classes!("navbar-menu", active_class)}>
-                    <div class="navbar-start">
-                        <Link<Route> classes={classes!("navbar-item")} to={Route::Home}>
-                            { "Home" }
-                        </Link<Route>>
-
-                    </div>
-                </div>
-            </nav>
+            <div style="position: absolute;top: 0;left: 0; width: 200px;height: 100%;">
+            <ul role="menubar" class="el-menu-vertical-demo el-menu">
+            <li role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 20px;">
+            <span>
+              <Link<Route> classes={classes!("navbar-item")} to={Route::Home}>{ "pod" }</Link<Route>>
+            </span></li>
+            <li role="menuitem" tabindex="-2" class="el-menu-item" style="padding-left: 20px;">
+            <span>
+              <Link<Route> classes={classes!("navbar-item")} to={Route::NotFound}>{ "deploy" }</Link<Route>>
+            </span></li>
+            </ul>
+            </div>
         }
     }
 }
