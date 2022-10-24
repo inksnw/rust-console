@@ -11,7 +11,7 @@ pub enum AppMsg {
 
 
 pub async fn load_resource(ns: Option<String>, resource_type: String) -> Result<String, wasm_bindgen::JsValue> {
-    let pod_list = Request::get(&super::pods_api(ns, resource_type).as_str()).send().
+    let pod_list = Request::get(&super::core_v1(ns, resource_type).as_str()).send().
         await.unwrap().text().await.unwrap();
     Ok(pod_list)
 }

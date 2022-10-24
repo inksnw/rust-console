@@ -2,7 +2,7 @@ use k8s_openapi::api::core::v1::Namespace;
 use yew::prelude::*;
 use yew::Properties;
 
-use crate::apis::namespace::*;
+use crate::apis::apiv1::*;
 use crate::element_ui::select::ElSelect;
 use crate::element_ui::ValueText;
 
@@ -29,10 +29,10 @@ impl Component for NameSpaceSelect {
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             NamespaceMsg::LoadNS => {
-                ctx.link().send_future(load_ns_future());
+                ctx.link().send_future(load_ns_future("namespaces".to_string()));
             }
             NamespaceMsg::LoadNSDone(data) => {
-                self.ns_list = data;
+                self.ns_list = serde_json::from_str(data.as_str()).unwrap();
             }
             NamespaceMsg::Onchange(vt) => {
                 if let Some(call) = ctx.props().onchange.clone() {
