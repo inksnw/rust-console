@@ -93,22 +93,29 @@ impl ElTable {
                     </tr>}
         }).collect::<Html>()
     }
-    fn render_cell(&self, row: &Value, prop: String) -> Html {
+    fn render_cell(&self, row: &Value, query: String) -> Html {
         let empty_value = Value::String(String::new());
+        let value = self.get_json_value(&query, row, &empty_value);
+        let namespace = self.get_json_value("metadata.namespace", row, &empty_value);
+        let kind = self.get_json_value("kind", row, &empty_value);
+        let url = if namespace == "" { format!("{}/{}", kind, value) } else { format!("{}/{}/{}", kind, namespace, value) };
+
+
         html! {
             <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
             <div class="cell">
-            {
-                self.get_json_value(prop,row,&empty_value)
-            }
+
+             if query=="metadata.name"{
+                     <a href={ url }> {value} </a>
+                }else{
+                    {value}
+                }
             </div>
             </td>
         }
     }
 
-    fn get_json_value(&self, query: String, data: &Value, empty: &Value) -> String {
-
-
+    fn get_json_value(&self, query: &str, data: &Value, empty: &Value) -> String {
         let query_list: Vec<&str> = query.split(".").collect();
         if query_list.len() <= 0 {
             "--".to_string();
