@@ -1,12 +1,15 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::components::app::Resource;
+use crate::components::pod::Pods;
+use crate::components::deploy::Deploy;
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {
     #[at("/")]
     Home,
+    #[at("/deploy")]
+    Deploy,
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -17,7 +20,12 @@ fn switch(routes: &Route) -> Html {
     match routes {
         Route::Home => html! {
             <div style="margin-left: 200px;height: 100%;" >
-            <Resource/>
+            <Pods/>
+            </div>
+            },
+        Route::Deploy => html! {
+            <div style="margin-left: 200px;height: 100%;" >
+            <Deploy/>
             </div>
             },
         Route::NotFound => html! {
@@ -62,8 +70,14 @@ impl MyRoute {
             </span></li>
             <li role="menuitem" tabindex="-2" class="el-menu-item" style="padding-left: 20px;">
             <span>
-              <Link<Route> classes={classes!("navbar-item")} to={Route::NotFound}>{ "deploy" }</Link<Route>>
-            </span></li>
+              <Link<Route> classes={classes!("navbar-item")} to={Route::Deploy}>{ "deploy" }</Link<Route>>
+            </span>
+            </li>
+              <li role="menuitem" tabindex="-3" class="el-menu-item" style="padding-left: 20px;">
+            <span>
+              <Link<Route> classes={classes!("navbar-item")} to={Route::NotFound}>{ "404" }</Link<Route>>
+            </span>
+            </li>
             </ul>
             </div>
         }
