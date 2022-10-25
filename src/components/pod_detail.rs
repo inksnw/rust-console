@@ -1,0 +1,54 @@
+use serde_json::Value;
+use yew::{Context, Html, html};
+use yew::prelude::Component;
+use yew::Properties;
+
+use crate::apis::app::{AppMsg, load_pods_future};
+use crate::helper::utils::get_json_value;
+
+pub struct PodDetail {
+    pods: Value,
+}
+
+#[derive(Clone, PartialEq, Properties)]
+pub struct PodDetailProp {
+    pub ns: String,
+    pub name: String,
+}
+
+impl Component for PodDetail {
+    type Message = AppMsg;
+    type Properties = PodDetailProp;
+
+    fn create(ctx: &Context<Self>) -> Self {
+        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), Some(ctx.props().name.to_string()), "pods".to_string()));
+        Self {
+            pods: Value::String(String::new()),
+        }
+    }
+
+    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+        match msg {
+            AppMsg::UpdateNs(_) => {}
+            AppMsg::LoadPodsDone(pods_str) => {
+                self.pods = serde_json::from_str(pods_str.as_str()).unwrap();
+            }
+        }
+        true
+    }
+
+    fn view(&self, _ctx: &Context<Self>) -> Html {
+        let empty_value = Value::String(String::new());
+        let name = get_json_value("metadata.name", &self.pods, &empty_value);
+        let create_time = get_json_value("metadata.creationTimestamp", &self.pods, &empty_value);
+
+        html! {
+            <div>
+            <h1>{ format!("pod: {} 创建于 {}",name,create_time) }</h1>
+            </div>
+        }
+    }
+}
+
+
+

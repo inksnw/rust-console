@@ -17,7 +17,7 @@ impl Component for Pods {
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(None, "pods".to_string()));
+        ctx.link().send_future(load_pods_future(None, None, "pods".to_string()));
         Self {
             ns: String::new(),
             pods: vec![],
@@ -28,7 +28,7 @@ impl Component for Pods {
         match msg {
             AppMsg::UpdateNs(newvalue) => {
                 self.ns = newvalue.value;
-                ctx.link().send_future(load_pods_future(Some(self.ns.to_string()), "pods".to_string()));
+                ctx.link().send_future(load_pods_future(Some(self.ns.to_string()), None, "pods".to_string()));
             }
             AppMsg::LoadPodsDone(pods_str) => {
                 self.pods = serde_json::from_str(pods_str.as_str()).unwrap();

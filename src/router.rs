@@ -1,7 +1,7 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::components::{deploy::Deploy, node::Nodes, pod::Pods};
+use crate::components::{deploy::Deploy, node::Nodes, pod::Pods, pod_detail::PodDetail};
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {
@@ -31,7 +31,7 @@ fn switch(routes: &Route) -> Html {
              <div style="margin-left: 200px;height: 100%;"><h1>{ "404" }</h1></div>
         },
         Route::PodDetail { ns, id } => html! {
-            <div style="margin-left: 200px;height: 100%;"><h1>{ format!("{} 空间下pod: {} 详情页",ns, id) }</h1></div>
+            <div style="margin-left: 200px;height: 100%;"><PodDetail ns={ns.clone()} name={id.clone()}/></div>
         }
     }
 }
@@ -75,18 +75,8 @@ impl MyRoute {
     fn view_nav(&self) -> Html {
         html! {
             <div>
-            <div>
-                <div aria-label="Breadcrumb" role="navigation" class="el-breadcrumb">
-                    <span class="el-breadcrumb__item">
-                        <span role="link" class="el-breadcrumb__inner is-link">{{"首页"}}</span>
-                        <span role="presentation" class="el-breadcrumb__separator">{{"/"}}</span>
-                    </span>
-                    <span class="el-breadcrumb__item">
-                        <span role="link" class="el-breadcrumb__inner"><a href="/">{{"节点列表"}}</a></span>
-                    </span>
-                </div>
-            </div>
-            <div style="position: absolute;top: 150;left: 0; width: 200px;height: 100%;">
+
+            <div style="position: absolute;top: 0;left: 0; width: 200px;height: 100%;">
             <ul role="menubar" class="el-menu-vertical-demo el-menu">
             {{ self.render_nav_item(Route::Home,"nodes".to_string())}}
             {{ self.render_nav_item(Route::Deploy,"deploy".to_string())}}

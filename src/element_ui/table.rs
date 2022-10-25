@@ -3,6 +3,8 @@ use serde_json::Value;
 use yew::{html, Properties};
 use yew::prelude::*;
 
+use crate::helper::utils::get_json_value;
+
 pub struct ElTable {}
 
 pub enum TableMsg {}
@@ -95,9 +97,9 @@ impl ElTable {
     }
     fn render_cell(&self, row: &Value, query: String) -> Html {
         let empty_value = Value::String(String::new());
-        let value = self.get_json_value(&query, row, &empty_value);
-        let namespace = self.get_json_value("metadata.namespace", row, &empty_value);
-        let kind = self.get_json_value("kind", row, &empty_value);
+        let value = get_json_value(&query, row, &empty_value);
+        let namespace = get_json_value("metadata.namespace", row, &empty_value);
+        let kind = get_json_value("kind", row, &empty_value);
         let url = if namespace == "" { format!("{}/{}", kind, value) } else { format!("{}/{}/{}", kind, namespace, value) };
 
 
@@ -113,27 +115,6 @@ impl ElTable {
             </div>
             </td>
         }
-    }
-
-    fn get_json_value(&self, query: &str, data: &Value, empty: &Value) -> String {
-        let query_list: Vec<&str> = query.split(".").collect();
-        if query_list.len() <= 0 {
-            "--".to_string();
-        }
-        let mut first: Option<&Value> = data.get(query_list.get(0).unwrap());
-        query_list.iter().enumerate().for_each(|(i, key)| {
-            if i > 0 {
-                match key.parse::<usize>() {
-                    Ok(k) => {
-                        first = first.and_then(|v| v.get(k));
-                    }
-                    _ => {
-                        first = first.and_then(|v| v.get(key));
-                    }
-                }
-            }
-        });
-        return first.unwrap_or(empty).as_str().unwrap_or("--").to_string();
     }
 }
 

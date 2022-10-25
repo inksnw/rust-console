@@ -26,7 +26,6 @@ impl Component for Nodes {
                 ctx.link().send_future(load_ns_future("namespaces".to_string()));
             }
             NamespaceMsg::LoadNSDone(pods_str) => {
-
                 self.nodes = serde_json::from_str(pods_str.as_str()).unwrap();
             }
             _ => {}
