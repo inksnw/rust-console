@@ -9,6 +9,8 @@ enum Route {
     Home,
     #[at("/Pod")]
     Pods,
+    #[at("/Pod/:ns/:id")]
+    PodDetail { ns: String, id: String },
     #[at("/Deployment")]
     Deploy,
     #[not_found]
@@ -27,6 +29,9 @@ fn switch(routes: &Route) -> Html {
             <div style="margin-left: 200px;height: 100%;"><Deploy/></div>},
         Route::NotFound => html! {
              <div style="margin-left: 200px;height: 100%;"><h1>{ "404" }</h1></div>
+        },
+        Route::PodDetail { ns, id } => html! {
+            <div style="margin-left: 200px;height: 100%;"><h1>{ format!("{} 空间下pod: {} 详情页",ns, id) }</h1></div>
         }
     }
 }
