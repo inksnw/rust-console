@@ -37,6 +37,7 @@ impl Component for Nodes {
     fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {
             <div>
+
             <ElTable width={"100%"} data={self.nodes.clone()}>
             <ElTableColumn label="名称" prop="metadata.name" width="200"/>
             <ElTableColumn label="IP" prop="status.addresses.0.address" width="200"/>
