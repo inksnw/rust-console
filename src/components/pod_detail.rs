@@ -39,7 +39,7 @@ impl Component for PodDetail {
         true
     }
 
-    fn view(&self, _ctx: &Context<Self>) -> Html {
+    fn view(&self, ctx: &Context<Self>) -> Html {
         let empty_value = Value::String(String::new());
         let name = get_json_value("metadata.name", &self.pods, &empty_value);
         let create_time = get_json_value("metadata.creationTimestamp", &self.pods, &empty_value);
@@ -49,7 +49,7 @@ impl Component for PodDetail {
             <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
             <li role="menuitem" tabindex="0" class="el-menu-item is-active">{{"资源状态"}}</li>
             <li role="menuitem" tabindex="0" class="el-menu-item">
-            <Link<Route>  to={Route::Event}>{ {"事件"} }</Link<Route>>
+            <Link<Route>  to={Route::Event{ns:ctx.props().ns.clone(),id:ctx.props().name.clone()}}>{ {"事件"} }</Link<Route>>
             </li>
             </ul>
             <h1>{ format!("pod: {} 创建于 {}",name,create_time) }</h1>

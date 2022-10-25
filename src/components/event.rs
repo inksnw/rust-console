@@ -1,7 +1,8 @@
-use yew::{Context, Html, html};
+use yew::{Context, Html, html, Properties};
 use yew::prelude::Component;
 use yew_router::prelude::*;
-
+use crate::element_ui::table::ElTable;
+use crate::element_ui::table::ElTableColumn;
 use crate::apis::app::{AppMsg, load_pods_future};
 use crate::helper::router::Route;
 
@@ -9,12 +10,18 @@ pub struct Event {
     pods: Vec<serde_json::Value>,
 }
 
+#[derive(Clone, PartialEq, Properties)]
+pub struct EventProp {
+    pub ns: String,
+    pub name: String,
+}
+
 impl Component for Event {
     type Message = AppMsg;
-    type Properties = ();
+    type Properties = EventProp;
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(None, None, "events".to_string()));
+        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), None, "events".to_string()));
         Self {
             pods: vec![],
         }
@@ -30,19 +37,25 @@ impl Component for Event {
         true
     }
 
-    fn view(&self, _ctx: &Context<Self>) -> Html {
+    fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
             <div>
 
             <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
             <li role="menuitem" tabindex="0" class="el-menu-item">
-             <Link<Route>  to={Route::PodDetail { ns: "kubesphere-system".to_string(), id: "minio-make-bucket-job-zfd2q".to_string() } }>{ {"资源状态"} }</Link<Route>>
+             <Link<Route>  to={Route::PodDetail { ns:   ctx.props().ns.clone(), id:   ctx.props().name.clone() } }>{ {"资源状态"} }</Link<Route>>
             </li>
             <li role="menuitem" tabindex="0" class="el-menu-item is-active">
-              <Link<Route>  to={Route::Event}>{ {"事件"} }</Link<Route>>
+             { {"事件"} }
             </li>
             </ul>
-           {{"这里是事件"}}
+           <div>
+            <ElTable width={"100%"} data={self.pods.clone()}>
+            <ElTableColumn label="时间" prop="firstTimestamp" width="200"/>
+            <ElTableColumn label="类型" prop="type"/>
+            <ElTableColumn label="消息" prop="message" width="200"/>
+            </ElTable>
+            </div>
             </div>
         }
     }

@@ -9,8 +9,8 @@ pub enum Route {
     Home,
     #[at("/Pod")]
     Pods,
-    #[at("/Event")]
-    Event,
+    #[at("/Event/:ns/:id")]
+    Event { ns: String, id: String },
     #[at("/Pod/:ns/:id")]
     PodDetail { ns: String, id: String },
     #[at("/Deployment")]
@@ -35,8 +35,8 @@ fn switch(routes: &Route) -> Html {
         Route::PodDetail { ns, id } => html! {
             <div style="margin-left: 200px;height: 100%;"><PodDetail ns={ns.clone()} name={id.clone()}/></div>
         },
-        Route::Event => html! {
-            <div style="margin-left: 200px;height: 100%;"><Event/></div>
+        Route::Event { ns, id } => html! {
+            <div style="margin-left: 200px;height: 100%;"><Event ns={ns.clone()} name={id.clone()} /></div>
         }
     }
 }
