@@ -1,10 +1,11 @@
-use k8s_openapi::api::core::v1::Namespace;
+use serde_json::Value;
 use yew::prelude::*;
 use yew::Properties;
 
 use crate::apis::apiv1::*;
 use crate::element_ui::select::ElSelect;
 use crate::element_ui::ValueText;
+use crate::helper::utils::get_json_value;
 
 #[derive(Properties, PartialEq)]
 pub struct NamespaceProps {
@@ -14,7 +15,7 @@ pub struct NamespaceProps {
 }
 
 pub struct NameSpaceSelect {
-    ns_list: Vec<Namespace>,
+    ns_list: Vec<serde_json::Value>,
 }
 
 impl Component for NameSpaceSelect {
@@ -54,10 +55,11 @@ impl Component for NameSpaceSelect {
 
 impl NameSpaceSelect {
     fn render_select(&self, ctx: &Context<Self>) -> Html {
+        let empty_value = Value::String(String::new());
         let nsdata = self.ns_list.iter().
-            map(|ns: &Namespace| ValueText {
-                value: ns.metadata.name.as_ref().unwrap().clone(),
-                text: ns.metadata.name.as_ref().unwrap().clone(),
+            map(|item| ValueText {
+                value: get_json_value("metadata.name", item, &empty_value),
+                text: get_json_value("metadata.name", item, &empty_value),
             }).collect::<Vec<ValueText>>();
         html! {
         <ElSelect data={nsdata} onchange={ctx.link().callback(NamespaceMsg::Onchange)} />
