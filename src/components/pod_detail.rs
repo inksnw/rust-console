@@ -2,8 +2,10 @@ use serde_json::Value;
 use yew::{Context, Html, html};
 use yew::prelude::Component;
 use yew::Properties;
+use yew_router::prelude::*;
 
 use crate::apis::app::{AppMsg, load_pods_future};
+use crate::helper::router::Route;
 use crate::helper::utils::get_json_value;
 
 pub struct PodDetail {
@@ -44,6 +46,12 @@ impl Component for PodDetail {
 
         html! {
             <div>
+            <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
+            <li role="menuitem" tabindex="0" class="el-menu-item is-active">{{"资源状态"}}</li>
+            <li role="menuitem" tabindex="0" class="el-menu-item">
+            <Link<Route>  to={Route::Event}>{ {"事件"} }</Link<Route>>
+            </li>
+            </ul>
             <h1>{ format!("pod: {} 创建于 {}",name,create_time) }</h1>
             </div>
         }

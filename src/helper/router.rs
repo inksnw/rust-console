@@ -1,14 +1,16 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::components::{deploy::Deploy, node::Nodes, pod::Pods, pod_detail::PodDetail};
+use crate::components::{deploy::Deploy, event::Event, node::Nodes, pod::Pods, pod_detail::PodDetail};
 
 #[derive(Clone, Routable, PartialEq)]
-enum Route {
+pub enum Route {
     #[at("/")]
     Home,
     #[at("/Pod")]
     Pods,
+    #[at("/Event")]
+    Event,
     #[at("/Pod/:ns/:id")]
     PodDetail { ns: String, id: String },
     #[at("/Deployment")]
@@ -32,6 +34,9 @@ fn switch(routes: &Route) -> Html {
         },
         Route::PodDetail { ns, id } => html! {
             <div style="margin-left: 200px;height: 100%;"><PodDetail ns={ns.clone()} name={id.clone()}/></div>
+        },
+        Route::Event => html! {
+            <div style="margin-left: 200px;height: 100%;"><Event/></div>
         }
     }
 }
