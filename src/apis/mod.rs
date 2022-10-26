@@ -15,7 +15,7 @@ pub fn api_v1(resource_type: String) -> String {
 pub fn core_v1(ns: Option<String>, ins: Option<String>, resource_type: String) -> String {
     match (ns, ins) {
         (None, None) => {
-            with_path(&format!("/kapis/namespaces/default/{}", resource_type))
+            with_path(&format!("/kapis/{}", resource_type))
         }
         (None, Some(s)) => {
             with_path(&format!("/kapis/namespaces/default/{}/{}", resource_type, s))

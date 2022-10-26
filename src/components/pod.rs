@@ -47,6 +47,23 @@ impl Component for Pods {
             <ElTableColumn label="状态" prop="status.phase"/>
             <ElTableColumn label="IP" prop="status.podIP" width="200"/>
             </ElTable>
+
+            <div class="el-pagination">
+                <button type="button" class="btn-prev" disabled=true>
+                    <i class="el-icon el-icon-arrow-left"></i>
+                </button>
+                <ul class="el-pager">
+                    <li class="number active">{{"1"}}</li>
+                    <li class="number">{{"2"}}</li>
+                    <li class="number">{{"3"}}</li>
+                    <li class="el-icon more btn-quicknext el-icon-more"></li>
+                    <li class="number">{{"100"}}</li>
+                </ul>
+                <button type="button" class="btn-next">
+                    <i class="el-icon el-icon-arrow-right"></i>
+                </button>
+            </div>
+
             </div>
         }
     }
