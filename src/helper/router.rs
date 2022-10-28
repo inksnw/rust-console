@@ -41,32 +41,20 @@ fn switch(routes: &Route) -> Html {
     }
 }
 
-pub enum Msg {}
 
-pub(crate) struct MyRoute {}
-
-impl Component for MyRoute {
-    type Message = Msg;
-    type Properties = ();
-
-    fn create(_ctx: &Context<Self>) -> Self {
-        Self {}
-    }
-
-
-    fn view(&self, _ctx: &Context<Self>) -> Html {
-        html! {
+#[function_component(MyRoute)]
+pub fn root() -> Html {
+    html! {
         <BrowserRouter>
-            { self.view_nav() }
+            { view_nav() }
             <Switch<Route> render={Switch::render(switch)} />
         </BrowserRouter>
-        }
     }
 }
 
-impl MyRoute {
-    fn render_nav_item(&self, item: Route, name: String) -> Html {
-        html! {
+
+fn render_nav_item(item: Route, name: String) -> Html {
+    html! {
             <li role="menuitem" tabindex="-1" class="el-menu-item " style="padding-left: 20px;">
             <i class="el-icon-document"></i>
             <span>
@@ -74,21 +62,19 @@ impl MyRoute {
             </span>
             </li>
         }
-    }
+}
 
 
-    fn view_nav(&self) -> Html {
-        html! {
+fn view_nav() -> Html {
+    html! {
             <div>
-
             <div style="position: absolute;top: 0;left: 0; width: 200px;height: 100%;">
             <ul role="menubar" class="el-menu-vertical-demo el-menu">
-            {{ self.render_nav_item(Route::Home,"nodes".to_string())}}
-            {{ self.render_nav_item(Route::Deploy,"deploy".to_string())}}
-            {{ self.render_nav_item(Route::Pods,"pods".to_string())}}
+            {{ render_nav_item(Route::Home,"nodes".to_string())}}
+            {{ render_nav_item(Route::Deploy,"deploy".to_string())}}
+            {{ render_nav_item(Route::Pods,"pods".to_string())}}
             </ul>
             </div>
             </div>
         }
-    }
 }
