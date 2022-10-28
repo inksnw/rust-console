@@ -43,8 +43,8 @@ impl Component for ElButton {
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
         <button type="button" 
-          onclick={ctx.link().callback(|e:MouseEvent| ElButtonMsg::Click(e))}
-           class={format!("el-button el-button--{}",ctx.props().button_type)}>
+            onclick={ctx.link().callback(|e:MouseEvent| ElButtonMsg::Click(e))}
+            class={format!("el-button el-button--{}",ctx.props().button_type)}>
           <span>{ctx.props().value}</span>
         </button>
         }

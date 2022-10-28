@@ -1,4 +1,6 @@
 use yew::{Children, html, Properties};
+//-----------------------------------ELForm
+use yew::function_component;
 use yew::prelude::*;
 
 #[derive(Clone, PartialEq)]
@@ -30,7 +32,7 @@ impl Component for ElFormItem {
             _ctx.props().children.iter().map(|child|{
                 html!{
                     <div class="el-form-item">
-                      <label class="el-form-item__label" 
+                      <label class="el-form-item__label"
                         style={format!("width:{}",_ctx.props().label_witdh)}>
                           {_ctx.props().label.clone()}
                       </label>
@@ -48,24 +50,16 @@ impl Component for ElFormItem {
 #[derive(Properties, Clone, PartialEq)]
 pub struct ElFormProps {
     #[prop_or_default]
+    pub style: &'static str,
+    #[prop_or_default]
     pub children: ChildrenWithProps<ElFormItem>,
 }
 
-pub struct ElForm {}
-
-
-impl Component for ElForm {
-    type Message = ();
-    type Properties = ElFormProps;
-
-    fn create(_ctx: &Context<Self>) -> Self {
-        Self {}
-    }
-
-    fn view(&self, ctx: &Context<Self>) -> Html {
-        html! {
-         <form class="el-form">
-         {  ctx.props().children.iter().map(|child|{
+#[function_component(ElForm)]
+pub fn el_form(props: &ElFormProps) -> Html {
+    html! {
+         <form class="el-form" style={props.style.clone()}>
+         {  props.children.iter().map(|child|{
             html!{
                 {child}
             }
@@ -73,6 +67,4 @@ impl Component for ElForm {
         }
         </form>
     }
-    }
 }
-
