@@ -1,8 +1,10 @@
-use gloo::console::log;
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
-use crate::element_ui::{ElButton, ElCheckBox, ElForm, ElFormItem, ElInput, ElInputNumber, ElSwitch};
+use crate::element_ui::{ElButton, ElCheckBox, ElForm,
+                        ElFormItem, ElInput, ElInputNumber, ElSwitch};
+use crate::helper::js::log_str;
+use crate::helper::message::{error, success};
 
 #[derive(Default, Serialize, Deserialize, Clone)]
 struct FormData {
@@ -27,7 +29,6 @@ pub struct FormTest {
 
 pub enum FormTestMsg {
     UpdateData(String, UpdateType),
-
     LogData,
 }
 
@@ -58,7 +59,7 @@ impl Component for FormTest {
             }
             FormTestMsg::LogData => {
                 let str = serde_json::to_string_pretty(&self.data).unwrap();
-                log!(str);
+                log_str(str);
             }
         }
         true
@@ -87,8 +88,12 @@ impl Component for FormTest {
                   />
                </ElFormItem>
             </ElForm>
+
             <ElButton value={"点我"} button_type={"primary"}
                 onclick={ctx.link().callback(|_| FormTestMsg::LogData)}
+                />
+                <ElButton value={"消息框"} button_type={"default"}
+                    onclick={Callback::from(|_|{error("错误消息 ")})}
                 />
 
             </div>
