@@ -1,3 +1,5 @@
+extern crate core;
+
 use helper::router::MyRoute;
 
 pub mod components;

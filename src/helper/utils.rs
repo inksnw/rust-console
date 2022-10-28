@@ -20,3 +20,14 @@ pub fn get_json_value(query: &str, data: &Value, empty: &Value) -> String {
     });
     return first.unwrap_or(empty).as_str().unwrap_or("--").to_string();
 }
+
+pub fn replace_param(mut str: String, params: Vec<&str>, row: &Value) -> String {
+    let empty_value = Value::String(String::new());
+    let param_values: Vec<String> = params.into_iter().map(|p| {
+        get_json_value(p, row, &empty_value)
+    }).collect::<Vec<String>>();
+    param_values.iter().enumerate().for_each(|(i, v)| {
+        str = str.replace(format!("${}", i + 1).as_str(), v.as_str());
+    });
+    str
+}

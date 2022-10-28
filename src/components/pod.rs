@@ -2,8 +2,7 @@ use yew::{Context, Html, html};
 use yew::prelude::Component;
 
 use crate::apis::app::{AppMsg, load_pods_future};
-use crate::element_ui::table::ElTable;
-use crate::element_ui::table::ElTableColumn;
+use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
 
 use super::selectns::NameSpaceSelect;
 
@@ -46,6 +45,9 @@ impl Component for Pods {
             <ElTableColumn label="名称空间" prop="metadata.namespace" width="200"/>
             <ElTableColumn label="状态" prop="status.phase"/>
             <ElTableColumn label="IP" prop="status.podIP" width="200"/>
+             <ElTableColumn label="操作">
+                <ElTableLink href={"/a?name=$1&ns=$2"} params={vec!("metadata.name","metadata.namespace")} label="删除"/>
+            </ElTableColumn>
             </ElTable>
 
             <div class="el-pagination">

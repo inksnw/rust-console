@@ -1,9 +1,11 @@
 use serde_json;
 use serde_json::Value;
 use yew::{html, Properties};
+use yew::html::ChildrenRenderer;
 use yew::prelude::*;
+use yew::virtual_dom::VChild;
 
-use crate::helper::utils::get_json_value;
+use crate::helper::utils;
 
 pub struct ElTable {}
 
@@ -89,21 +91,37 @@ impl ElTable {
                     <tr class="el-table__row">
                     {
                         ctx.props().children.iter().enumerate().map(|(_i,item)|{
-                        self.render_cell(row,item.props.prop.clone())
+                        self.render_cell(row,item.props.children.clone(),item.props.prop.clone())
                         }).collect::<Html>()
                     }
                     </tr>}
         }).collect::<Html>()
     }
-    fn render_cell(&self, row: &Value, query: String) -> Html {
+    fn render_cell(&self, row: &Value, children: ChildrenRenderer<VChild<ElTableLink>>, query: String) -> Html {
         let empty_value = Value::String(String::new());
-        let value = get_json_value(&query, row, &empty_value);
-        let namespace = get_json_value("metadata.namespace", row, &empty_value);
-        let kind = get_json_value("kind", row, &empty_value);
+        let value = utils::get_json_value(&query, row, &empty_value);
+        let namespace = utils::get_json_value("metadata.namespace", row, &empty_value);
+        let kind = utils::get_json_value("kind", row, &empty_value);
         let url = if namespace == "" { format!("{}/{}", kind, value) } else { format!("{}/{}/{}", kind, namespace, value) };
 
+        if !children.is_empty() {
+            html! {
+            <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
+            <div class="cell">
+            {
+                children.iter().map(|child|{
+                html!{
+                    <a target={child.props.target.clone()} style={child.props.style.clone()}
+                    href={utils::replace_param(child.props.href.clone(),child.props.params.clone(),row)}>
+                    {child.props.label.clone()}</a>
+                }
+            }).collect::<Html>()}
 
-        html! {
+            </div>
+            </td>
+        }
+        } else {
+            html! {
             <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
             <div class="cell">
 
@@ -112,11 +130,14 @@ impl ElTable {
                 }else{
                     {value}
                 }
+
             </div>
             </td>
         }
+        }
     }
 }
+
 
 pub struct ElTableColumn {}
 
@@ -128,6 +149,8 @@ pub struct TableColumnProps {
     pub label: String,
     #[prop_or_default]
     pub prop: String,
+    #[prop_or_default]
+    pub children: ChildrenWithProps<ElTableLink>,
 }
 
 impl Component for ElTableColumn {
@@ -143,6 +166,37 @@ impl Component for ElTableColumn {
              <th class="el-table_2_column_5 is-leaf el-table__cell" colspan="1" rowspan="1">
               <div class="cell">{ctx.props().label.clone()}</div>
              </th>
+        }
+    }
+}
+
+pub struct ElTableLink {}
+
+#[derive(PartialEq, Properties, Clone)]
+pub struct TableLinkProps {
+    #[prop_or_default]
+    pub label: String,
+    #[prop_or("#".to_string())]
+    pub href: String,
+    #[prop_or_default]
+    pub style: String,
+    #[prop_or("_self".to_string())]
+    pub target: String,
+    #[prop_or_default]
+    pub params: Vec<&'static str>,
+}
+
+impl Component for ElTableLink {
+    type Message = ();
+    type Properties = TableLinkProps;
+
+    fn create(ctx: &Context<Self>) -> Self {
+        Self {}
+    }
+
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        html! {
+            <a href="">{ctx.props().label.clone()}</a>
         }
     }
 }
