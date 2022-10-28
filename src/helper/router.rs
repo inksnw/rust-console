@@ -1,7 +1,7 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::components::{deploy::Deploy, event::Event, node::Nodes, pod::Pods, pod_detail::PodDetail};
+use crate::components::{deploy::Deploy, event::Event, form::FormTest, node::Nodes, pod::Pods, pod_detail::PodDetail};
 
 #[derive(Clone, Routable, PartialEq)]
 pub enum Route {
@@ -18,6 +18,8 @@ pub enum Route {
     #[not_found]
     #[at("/404")]
     NotFound,
+    #[at("/forms")]
+    FormTest,
 }
 
 
@@ -37,6 +39,9 @@ fn switch(routes: &Route) -> Html {
         },
         Route::Event { ns, id } => html! {
             <div style="margin-left: 200px;height: 100%;"><Event ns={ns.clone()} name={id.clone()} /></div>
+        },
+        Route::FormTest => html! {
+            <div style="margin-left: 200px;height: 100%;"><FormTest  /></div>
         }
     }
 }
