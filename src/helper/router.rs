@@ -3,7 +3,7 @@ use yew_router::prelude::*;
 
 use crate::components::{deploy::Deploy, event::Event, form::FormTest, node::Nodes, pod::Pods, pod_detail::PodDetail};
 
-#[derive(Clone, Routable, PartialEq)]
+#[derive(Routable, PartialEq, Eq, Clone, Debug)]
 pub enum Route {
     #[at("/")]
     Home,
