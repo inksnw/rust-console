@@ -80,9 +80,10 @@ impl Component for Pods {
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.pods.clone()}>
             <ElTableColumn label="pod名" prop="metadata.name" width="200"/>
-            <ElTableColumn label="名称空间" prop="metadata.namespace" width="200"/>
             <ElTableColumn label="状态" prop="status.phase"/>
-            <ElTableColumn label="IP" prop="status.podIP" width="200"/>
+            <ElTableColumn label="节点" prop="status.hostIP" width="200"/>
+            <ElTableColumn label="父级" prop="metadata.ownerReferences.0.kind" width="200"/>
+            <ElTableColumn label="创建时间" prop="metadata.creationTimestamp" width="200"/>
              <ElTableColumn label="操作">
                 <ElTableLink href={"/a?name=$1&ns=$2"} params={vec!("metadata.name","metadata.namespace")} label="删除"/>
             </ElTableColumn>

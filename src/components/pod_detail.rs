@@ -23,7 +23,7 @@ impl Component for PodDetail {
     type Properties = PodDetailProp;
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), Some(ctx.props().name.to_string()),None, "pods".to_string()));
+        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), Some(ctx.props().name.to_string()), None, "pods".to_string()));
         Self {
             pods: Value::String(String::new()),
         }
@@ -40,24 +40,60 @@ impl Component for PodDetail {
         true
     }
 
-    fn view(&self, ctx: &Context<Self>) -> Html {
-        let empty_value = Value::String(String::new());
-        let name = get_json_value("metadata.name", &self.pods, &empty_value);
-        let create_time = get_json_value("metadata.creationTimestamp", &self.pods, &empty_value);
 
+    fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
             <div>
             <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
             <li role="menuitem" tabindex="0" class="el-menu-item is-active">{{"资源状态"}}</li>
             <li role="menuitem" tabindex="0" class="el-menu-item">
-            <Link<Route>  to={Route::Event{ns:ctx.props().ns.clone(),id:ctx.props().name.clone()}}>{ {"事件"} }</Link<Route>>
+            <Link<Route>  to={Route::Event{ns:ctx.props().ns.clone(),id:ctx.props().name.clone()}}>
+                { {"事件"} }
+            </Link<Route>>
             </li>
             </ul>
-            <h1>{ format!("pod: {} 创建于 {}",name,create_time) }</h1>
+            { self.info()}
             </div>
         }
     }
 }
 
 
+impl PodDetail {
+    fn td(&self, k: String, v: String) -> Html {
+        html! {
+            <td colspan="1" class="el-descriptions-item el-descriptions-item__cell">
+                <div class="el-descriptions-item__container">
+                    <span class="el-descriptions-item__label has-colon ">{k}</span>
+                    <span class="el-descriptions-item__content">{v}</span>
+                </div>
+            </td>
+        }
+    }
 
+    fn info(&self) -> Html {
+        let empty_value = Value::String(String::new());
+        let qos_class = get_json_value("status.qosClass", &self.pods, &empty_value);
+        let name = get_json_value("metadata.name", &self.pods, &empty_value);
+        let create_time = get_json_value("metadata.creationTimestamp", &self.pods, &empty_value);
+
+        html! {
+            <div class="el-descriptions">
+                <div class="el-descriptions__body">
+                    <table class="el-descriptions__table">
+                        <tbody>
+                        <tr class="el-descriptions-row">
+                            {self.td("名称".to_string(),name)}
+                            {self.td("服务等级".to_string(),qos_class)}
+                            {self.td("创建时间".to_string(),create_time)}
+                        </tr>
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    }
+    }
+}
