@@ -4,8 +4,6 @@ use yew_router::prelude::*;
 
 use crate::helper::router::Route;
 
-const ELLIPSIS: &str = "\u{02026}";
-
 #[derive(Serialize, Deserialize, PartialEq, Eq, Clone, Debug)]
 pub struct PageQuery {
     pub page: u64,
@@ -36,32 +34,30 @@ impl Component for Pagination {
         } = ctx.props().clone();
         html! {
            <div class="el-pagination">
-
-                <ul class="pagination-list">
+           <ul class="pagination-list">
              <Link<Route, PageQuery>
-                    classes={classes!("pagination-previous")}
                     disabled={page==1}
                     query={Some(PageQuery{page: page - 1})}
                     to={to.clone()}
                 >
-                      <button type="button" class="btn-prev" disabled=true>
-                    <i class="el-icon el-icon-arrow-left"></i>
-                </button>
-                </Link<Route, PageQuery>>
-               <ul class="el-pager">
-                    { self.view_links(ctx.props()) }
-             </ul>
-              <Link<Route, PageQuery>
-                    classes={classes!("pagination-next")}
+            <button type="button" class="btn-prev" disabled=true>
+            <i class="el-icon el-icon-arrow-left"></i>
+            </button>
+            </Link<Route, PageQuery>>
+
+           <ul class="el-pager">{ self.view_links(ctx.props()) }</ul>
+
+            <Link<Route, PageQuery>
                     disabled={page==total_pages}
                     query={Some(PageQuery{page: page + 1})}
                     {to}
                 >
-                    <button type="button" class="btn-next">
-                    <i class="el-icon el-icon-arrow-right"></i>
-                </button>
-                </Link<Route, PageQuery>>
-                </ul>
+            <button type="button" class="btn-next">
+            <i class="el-icon el-icon-arrow-right"></i>
+            </button>
+            </Link<Route, PageQuery>>
+
+            </ul>
            </div>
         }
     }
@@ -75,16 +71,16 @@ impl Pagination {
             ..
         } = props.clone();
 
-        let is_current_class = if to_page == page { "is-current" } else { "" };
+        let is_current_class = if to_page == page { true } else { false };
 
         html! {
             <li>
-                <Link<Route, PageQuery>
-                    classes={classes!("pagination-link", is_current_class)}
-                    to={route_to_page}
-                    query={Some(PageQuery{page: to_page})}
-                >
-                    { to_page }
+                <Link<Route, PageQuery> to={route_to_page} query={Some(PageQuery{page: to_page})}>
+                    if is_current_class{
+                         <li class="number active" >  { to_page }</li>
+                    }else{
+                          <li class="number">  { to_page }</li>
+                    }
                 </Link<Route, PageQuery>>
             </li>
         }
@@ -103,7 +99,7 @@ impl Pagination {
             html! {
                 <>
                     { for links }
-                    <li><span class="pagination-ellipsis">{ ELLIPSIS }</span></li>
+                     <li class="el-icon more btn-quicknext el-icon-more"></li>
                     { last_link }
                 </>
             }
@@ -130,7 +126,7 @@ impl Pagination {
         html! {
             <>
                 { self.render_links(1..page, pages_prev, links_left, props) }
-                <li class="number">{ self.render_link(page, props) }</li>
+                { self.render_link(page, props) }
                 { self.render_links(page + 1..=total_pages, pages_next, links_right, props) }
             </>
         }
