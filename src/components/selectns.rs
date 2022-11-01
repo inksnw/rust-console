@@ -15,7 +15,7 @@ pub struct NamespaceProps {
 }
 
 pub struct NameSpaceSelect {
-    ns_list: Vec<serde_json::Value>,
+    ns_list: Vec<Value>,
 }
 
 impl Component for NameSpaceSelect {
@@ -33,7 +33,9 @@ impl Component for NameSpaceSelect {
                 ctx.link().send_future(load_ns_future("namespaces".to_string()));
             }
             NamespaceMsg::LoadNSDone(data) => {
-                self.ns_list = serde_json::from_str(data.as_str()).unwrap();
+                let tmp: serde_json::Value = serde_json::from_str(data.as_str()).unwrap();
+                let tmp1 = tmp.get("items").unwrap().to_string();
+                self.ns_list = serde_json::from_str(&tmp1[..]).unwrap();
             }
             NamespaceMsg::Onchange(vt) => {
                 if let Some(call) = ctx.props().onchange.clone() {

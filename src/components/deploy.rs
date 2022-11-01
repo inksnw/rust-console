@@ -18,7 +18,7 @@ impl Component for Deploy {
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(None, None,None, "deployments".to_string()));
+        ctx.link().send_future(load_pods_future(None, None, None, "deployments".to_string()));
         Self {
             ns: String::new(),
             pods: vec![],
@@ -29,10 +29,12 @@ impl Component for Deploy {
         match msg {
             AppMsg::UpdateNs(newvalue) => {
                 self.ns = newvalue.value;
-                ctx.link().send_future(load_pods_future(Some(self.ns.to_string()), None,None, "deployments".to_string()));
+                ctx.link().send_future(load_pods_future(Some(self.ns.to_string()), None, None, "deployments".to_string()));
             }
             AppMsg::LoadPodsDone(pods_str) => {
-                self.pods = serde_json::from_str(pods_str.as_str()).unwrap();
+                let tmp: serde_json::Value = serde_json::from_str(pods_str.as_str()).unwrap();
+                let tmp1 = tmp.get("items").unwrap().to_string();
+                self.pods = serde_json::from_str(&tmp1[..]).unwrap();
             }
             _ => {}
         }

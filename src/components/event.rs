@@ -32,7 +32,9 @@ impl Component for Event {
         match msg {
             AppMsg::UpdateNs(_) => {}
             AppMsg::LoadPodsDone(pods_str) => {
-                self.pods = serde_json::from_str(pods_str.as_str()).unwrap();
+                let tmp: serde_json::Value = serde_json::from_str(pods_str.as_str()).unwrap();
+                let tmp1 = tmp.get("items").unwrap().to_string();
+                self.pods = serde_json::from_str(&tmp1[..]).unwrap();
             }
             _ => {}
         }
