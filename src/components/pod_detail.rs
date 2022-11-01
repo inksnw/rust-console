@@ -23,7 +23,7 @@ impl Component for PodDetail {
     type Properties = PodDetailProp;
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), Some(ctx.props().name.to_string()), "pods".to_string()));
+        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), Some(ctx.props().name.to_string()),None, "pods".to_string()));
         Self {
             pods: Value::String(String::new()),
         }
@@ -35,6 +35,7 @@ impl Component for PodDetail {
             AppMsg::LoadPodsDone(pods_str) => {
                 self.pods = serde_json::from_str(pods_str.as_str()).unwrap();
             }
+            _ => {}
         }
         true
     }

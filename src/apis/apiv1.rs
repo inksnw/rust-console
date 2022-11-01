@@ -13,7 +13,7 @@ pub enum NamespaceMsg {
 
 
 pub async fn load_ns(resource_type: String) -> Result<String, wasm_bindgen::JsValue> {
-    let rv = Request::get(&super::api_v1(resource_type).as_str()).send().
+    let rv = Request::get(&super::api_v1(resource_type, None).as_str()).send().
         await.unwrap().text().await.unwrap();
     Ok(rv)
 }

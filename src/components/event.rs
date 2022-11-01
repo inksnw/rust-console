@@ -22,7 +22,7 @@ impl Component for Event {
     type Properties = EventProp;
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), None, "events".to_string()));
+        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), None, None,"events".to_string()));
         Self {
             pods: vec![],
         }
@@ -34,6 +34,7 @@ impl Component for Event {
             AppMsg::LoadPodsDone(pods_str) => {
                 self.pods = serde_json::from_str(pods_str.as_str()).unwrap();
             }
+            _ => {}
         }
         true
     }
