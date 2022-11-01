@@ -19,7 +19,7 @@ fn current_page(ctx: &Context<Pods>) -> u64 {
 
 
 pub struct Pods {
-    ns: String,
+    ns: Option<String>,
     pods: Vec<serde_json::Value>,
     page: u64,
     total_items: u64,
@@ -39,7 +39,7 @@ impl Component for Pods {
             .unwrap();
 
         Self {
-            ns: String::new(),
+            ns: None,
             pods: vec![],
             page: current_page(ctx),
             total_items: 1,
@@ -50,9 +50,9 @@ impl Component for Pods {
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             AppMsg::UpdateNs(newvalue) => {
-                self.ns = newvalue.value;
+                self.ns = Some(newvalue.value);
                 self.page = 1;
-                ctx.link().send_future(load_pods_future(Some(self.ns.to_string()), None, Some("1".to_string()), "pods".to_string()));
+                ctx.link().send_future(load_pods_future(self.ns.clone(), None, Some("1".to_string()), "pods".to_string()));
             }
             AppMsg::LoadPodsDone(pods_str) => {
                 let tmp: serde_json::Value = serde_json::from_str(pods_str.as_str()).unwrap();
@@ -64,7 +64,7 @@ impl Component for Pods {
             }
             AppMsg::PageUpdated => {
                 self.page = current_page(ctx);
-                ctx.link().send_future(load_pods_future(None, None, Some(self.page.to_string()), "pods".to_string()));
+                ctx.link().send_future(load_pods_future(self.ns.clone(), None, Some(self.page.to_string()), "pods".to_string()));
             }
         }
         true
