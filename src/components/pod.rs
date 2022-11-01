@@ -55,6 +55,7 @@ impl Component for Pods {
         match msg {
             AppMsg::UpdateNs(newvalue) => {
                 self.ns = newvalue.value;
+                self.page = 1;
                 ctx.link().send_future(load_pods_future(Some(self.ns.to_string()), None, Some("1".to_string()), "pods".to_string()));
             }
             AppMsg::LoadPodsDone(pods_str) => {
@@ -78,7 +79,7 @@ impl Component for Pods {
         let mut total_pages = (self.total_items + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
         total_pages = if total_pages == 0 { 1 } else { total_pages };
 
-        // log!(format!("页面数: {}",total_pages));
+        log!(format!("页面数: {}",total_pages));
 
         html! {
             <div>

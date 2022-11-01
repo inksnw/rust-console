@@ -34,7 +34,7 @@ impl Component for Pagination {
             route_to_page: to,
         } = ctx.props().clone();
 
-        log!("当前的page是 {}",page==1);
+
         html! {
            <div class="el-pagination">
            <ul class="pagination-list">
