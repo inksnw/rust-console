@@ -1,4 +1,3 @@
-use gloo::console::log;
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 use yew_router::prelude::*;

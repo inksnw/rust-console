@@ -16,7 +16,6 @@ pub enum Msg {
 
 #[derive(Clone, PartialEq, Properties)]
 pub struct Props {
-    #[prop_or(vec ! (ValueText{value: String::from(""), text: String::from("---请选择---")}))]
     pub data: Vec<ValueText>,
     pub onchange: Option<Callback<ValueText>>,
 }
@@ -47,27 +46,21 @@ impl Component for ElSelect {
         true
     }
 
-    fn view(&self, _ctx: &Context<Self>) -> Html {
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        let arrow = if self.show { "el-icon-arrow-down" } else { "el-icon-arrow-up" };
+
         html! {
             <div class="el-select">
              <div class="el-input el-input--suffix ">
              <input type="text" readonly=true autocomplete="off"
-               placeholder="请选择" value={self.vt.text.clone()}
+               placeholder="全部名称空间" value={self.vt.text.clone()}
 
-               onclick={_ctx.link().callback(|_| Msg::Toggle)}
+               onclick={ctx.link().callback(|_| Msg::Toggle)}
                class="el-input__inner"/>
                 <span class="el-input__suffix">
                     <span class="el-input__suffix-inner">
-                    <i class={format!("el-select__caret
-                        el-input__icon
-                         ")+{
-                             if self.show{
-                                 "el-icon-arrow-down"
-                             }else{
-                                 "el-icon-arrow-up"
-                             }
-                         }}
-                     onclick={_ctx.link().callback(|_| Msg::Toggle)}
+                    <i class={format!("el-select__caret  el-input__icon {}",arrow)}
+                     onclick={ctx.link().callback(|_| Msg::Toggle)}
                     ></i>
                     </span>
                 </span>
@@ -75,35 +68,26 @@ impl Component for ElSelect {
 
 
             <div class="el-scrollbar el-popper el-select-dropdown "
-            style={format!("position: absolute !important;
-            left:0; top:35px;z-index: 2000;width:100%;")+{
-                 if self.show{
-                     ""
-                 }else{
-                     "display:none"
-                 }
+            style={format!("position: absolute !important; left:0; top:35px;z-index: 2000;width:100%;")+{
+                 if self.show{""}else{"display:none"}
             }}>
               <div class="el-select-dropdown__wrap"  >
-                    <ul class="el-scrollbar__view el-select-dropdown__list">
-                    {
-                        for _ctx.props().data.iter().map(|vt|{
-                            let v=format!("{}",&vt.value);
-                            let t=format!("{}",&vt.text);
-                            html!{
-                                <li class="el-select-dropdown__item" onclick={_ctx.link().callback(move |_| Msg::Select(v.clone(),t.clone()))}>
-                                    <span>{&vt.text}</span>
-                                </li>
-
-                            }
-                        })
-                    }
-                    </ul>
+                <ul class="el-scrollbar__view el-select-dropdown__list">
+                {
+                    for ctx.props().data.iter().map(|vt|{
+                        let v=format!("{}",&vt.value);
+                        let t=format!("{}",&vt.text);
+                        html!{
+                            <li class="el-select-dropdown__item" onclick={ctx.link().callback(move |_| Msg::Select(v.clone(),t.clone()))}>
+                                <span>{&vt.text}</span>
+                            </li>
+                        }
+                    })
+                }
+                </ul>
              </div>
             </div>
-
-
             </div>
-
         }
     }
 }

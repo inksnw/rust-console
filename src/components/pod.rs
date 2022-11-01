@@ -1,5 +1,3 @@
-use gloo::console::log;
-use serde_json::Value;
 use yew::{Context, Html, html};
 use yew::prelude::Component;
 use yew_router::prelude::*;
@@ -13,11 +11,9 @@ use crate::helper::router::Route;
 use super::selectns::NameSpaceSelect;
 
 const ITEMS_PER_PAGE: u64 = 5;
-const TOTAL_PAGES: u64 = 100 / ITEMS_PER_PAGE;
 
 fn current_page(ctx: &Context<Pods>) -> u64 {
     let location = ctx.link().location().unwrap();
-
     location.query::<PageQuery>().map(|it| it.page).unwrap_or(1)
 }
 
@@ -43,11 +39,11 @@ impl Component for Pods {
             .unwrap();
 
         Self {
-            page: current_page(ctx),
-            _listener: listener,
             ns: String::new(),
             pods: vec![],
-            total_items: 10,
+            page: current_page(ctx),
+            total_items: 1,
+            _listener: listener,
         }
     }
 
@@ -76,10 +72,8 @@ impl Component for Pods {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let page = self.page;
-        let mut total_pages = (self.total_items + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
-        total_pages = if total_pages == 0 { 1 } else { total_pages };
-
-        log!(format!("页面数: {}",total_pages));
+        let total_pages = (self.total_items + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
+        let total_pages = if total_pages == 0 { 1 } else { total_pages };
 
         html! {
             <div>

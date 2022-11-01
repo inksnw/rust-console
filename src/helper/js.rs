@@ -10,10 +10,9 @@ pub fn alert(str: &str) {
     window().unwrap().alert_with_message(str).unwrap();
 }
 
+
 pub fn log(obj: &wasm_bindgen::JsValue) {
-    unsafe {
-        console::log_1(obj);
-    }
+    console::log_1(obj);
 }
 
 pub fn log_str(str: String) {
