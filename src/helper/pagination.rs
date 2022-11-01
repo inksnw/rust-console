@@ -1,3 +1,4 @@
+use gloo::console::log;
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -32,6 +33,8 @@ impl Component for Pagination {
             total_pages,
             route_to_page: to,
         } = ctx.props().clone();
+
+        log!("当前的page是 {}",page==1);
         html! {
            <div class="el-pagination">
            <ul class="pagination-list">
@@ -40,9 +43,13 @@ impl Component for Pagination {
                     query={Some(PageQuery{page: page - 1})}
                     to={to.clone()}
                 >
-            <button type="button" class="btn-prev" disabled=true>
-            <i class="el-icon el-icon-arrow-left"></i>
-            </button>
+            if page!=1{
+                  <button type="button" class="btn-prev" disabled={page==1}>
+                 <i class="el-icon el-icon-arrow-left"></i>
+                 </button>
+            }
+
+
             </Link<Route, PageQuery>>
 
            <ul class="el-pager">{ self.view_links(ctx.props()) }</ul>
@@ -52,9 +59,13 @@ impl Component for Pagination {
                     query={Some(PageQuery{page: page + 1})}
                     {to}
                 >
-            <button type="button" class="btn-next">
-            <i class="el-icon el-icon-arrow-right"></i>
-            </button>
+                if page!=total_pages{
+                  <button type="button" class="btn-next" disabled={page==total_pages}>
+                <i class="el-icon el-icon-arrow-right"></i>
+                </button>
+                }
+
+
             </Link<Route, PageQuery>>
 
             </ul>
