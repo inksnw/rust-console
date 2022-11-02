@@ -4,7 +4,7 @@ use yew::prelude::*;
 use crate::element_ui::{ElButton, ElCheckBox, ElForm,
                         ElFormItem, ElInput, ElInputNumber, ElSwitch};
 use crate::helper::js::log_str;
-use crate::helper::message::{error};
+use crate::helper::message::error;
 
 #[derive(Default, Serialize, Deserialize, Clone)]
 struct FormData {
@@ -65,7 +65,7 @@ impl Component for FormTest {
         true
     }
     fn view(&self, ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
           <div>
             <div>{"新增用户"}</div>
             <ElForm style={"margin-top:20px"}>
@@ -97,6 +97,6 @@ impl Component for FormTest {
                 />
 
             </div>
-        }
+        )
     }
 }

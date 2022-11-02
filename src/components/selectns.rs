@@ -47,11 +47,11 @@ impl Component for NameSpaceSelect {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
           <div>
           {self.render_select(ctx)}
           </div>
-      }
+        )
     }
 }
 

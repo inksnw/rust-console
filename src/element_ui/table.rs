@@ -32,7 +32,7 @@ impl Component for ElTable {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
 
 
         <div class="el-table el-table--fit el-table--striped el-table--enable-row-hover el-table--enable-row-transition"
@@ -79,7 +79,7 @@ impl Component for ElTable {
             <div class="el-table__column-resize-proxy" style="display: none;"></div>
         </div>
 
-        }
+        )
     }
 }
 
@@ -105,23 +105,23 @@ impl ElTable {
         let url = if namespace == "" { format!("{}/{}", kind, value) } else { format!("{}/{}/{}", kind, namespace, value) };
 
         if !children.is_empty() {
-            html! {
+            html!(
             <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
             <div class="cell">
             {
                 children.iter().map(|child|{
-                html!{
+                html!(
                     <a target={child.props.target.clone()} style={child.props.style.clone()}
                     href={utils::replace_param(child.props.href.clone(),child.props.params.clone(),row)}>
                     {child.props.label.clone()}</a>
-                }
+                )
             }).collect::<Html>()}
 
             </div>
             </td>
-        }
+        )
         } else {
-            html! {
+            html!(
             <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
             <div class="cell">
 
@@ -133,7 +133,7 @@ impl ElTable {
 
             </div>
             </td>
-        }
+        )
         }
     }
 }
@@ -162,11 +162,11 @@ impl Component for ElTableColumn {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
              <th class="el-table_2_column_5 is-leaf el-table__cell" colspan="1" rowspan="1">
               <div class="cell">{ctx.props().label.clone()}</div>
              </th>
-        }
+        )
     }
 }
 
@@ -195,8 +195,8 @@ impl Component for ElTableLink {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
             <a href="">{ctx.props().label.clone()}</a>
-        }
+        )
     }
 }

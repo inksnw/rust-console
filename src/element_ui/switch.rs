@@ -41,13 +41,13 @@ impl Component for ElSwitch {
         }
     }
     fn view(&self, _ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
         <div class={self.get_checkclass_div(_ctx)} onclick={_ctx.link().callback(|_| SwitchMsg::Edit)}>
            <input type="checkbox" disabled={_ctx.props().disabled} class="el-switch__input"/>
            <span class="el-switch__core" style={self.get_swichclass(_ctx)}>
         </span>
         </div>
-    }
+    )
     }
 }
 

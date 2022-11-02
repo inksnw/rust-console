@@ -46,7 +46,7 @@ impl Component for ElCheckBox {
         }
     }
     fn view(&self, _ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
         <div class="el-input">
         <label class={self.get_checkclass("el-checkbox")}>
           <span class={self.get_checkclass("el-checkbox__input")}>
@@ -57,7 +57,7 @@ impl Component for ElCheckBox {
          <span class="el-checkbox__label">{_ctx.props().label}</span>
          </label>
         </div>
-    }
+    )
     }
 }
 

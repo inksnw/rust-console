@@ -22,7 +22,7 @@ impl Component for Event {
     type Properties = EventProp;
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), None, None,"events".to_string()));
+        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), None, None, "events".to_string()));
         Self {
             pods: vec![],
         }
@@ -42,7 +42,7 @@ impl Component for Event {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
             <div>
 
             <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
@@ -61,7 +61,7 @@ impl Component for Event {
             </ElTable>
             </div>
             </div>
-        }
+        )
     }
 }
 

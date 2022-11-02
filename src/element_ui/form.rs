@@ -28,7 +28,7 @@ impl Component for ElFormItem {
         true
     }
     fn view(&self, _ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
             _ctx.props().children.iter().map(|child|{
                 html!{
                     <div class="el-form-item">
@@ -43,7 +43,7 @@ impl Component for ElFormItem {
                     </div>
                 }
             }).collect::<Html>()
-    }
+    )
     }
 }
 
@@ -57,7 +57,7 @@ pub struct ElFormProps {
 
 #[function_component(ElForm)]
 pub fn el_form(props: &ElFormProps) -> Html {
-    html! {
+    html!(
          <form class="el-form" style={props.style.clone()}>
          {  props.children.iter().map(|child|{
             html!{
@@ -66,5 +66,5 @@ pub fn el_form(props: &ElFormProps) -> Html {
          }).collect::<Html>()
         }
         </form>
-    }
+    )
 }

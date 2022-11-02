@@ -42,7 +42,7 @@ impl Component for Deploy {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
             <div>
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.pods.clone()}>
@@ -50,7 +50,7 @@ impl Component for Deploy {
             <ElTableColumn label="名称空间" prop="metadata.namespace" width="200"/>
             </ElTable>
             </div>
-        }
+        )
     }
 }
 

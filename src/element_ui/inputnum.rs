@@ -69,22 +69,22 @@ impl Component for ElInputNumber {
         }
     }
     fn view(&self, _ctx: &Context<Self>) -> Html {
-        html! {
-      <div class="el-input-number" style={_ctx.props().style.clone()}>
-        <span role="button" class="el-input-number__decrease" onclick={_ctx.link().callback(|_| ElInputNumMsg::Decr)}>
-          <i class="el-icon-minus" >
-          </i>
-        </span>
-        <span role="button" class="el-input-number__increase" onclick={_ctx.link().callback(|_| ElInputNumMsg::Incr)}>
-          <i class="el-icon-plus" ></i>
-        </span>
-       <div class="el-input">
-         <input   disabled={_ctx.props().disabled} type="text" 
-            oninput={_ctx.link().callback(|e:InputEvent| ElInputNumMsg::Change(e))}
-            autocomplete="off" value={self.value.to_string()}  class="el-input__inner" />
-       </div>
-    </div>
-    }
+        html!(
+          <div class="el-input-number" style={_ctx.props().style.clone()}>
+            <span role="button" class="el-input-number__decrease" onclick={_ctx.link().callback(|_| ElInputNumMsg::Decr)}>
+              <i class="el-icon-minus" >
+              </i>
+            </span>
+            <span role="button" class="el-input-number__increase" onclick={_ctx.link().callback(|_| ElInputNumMsg::Incr)}>
+              <i class="el-icon-plus" ></i>
+            </span>
+           <div class="el-input">
+             <input   disabled={_ctx.props().disabled} type="text"
+                oninput={_ctx.link().callback(|e:InputEvent| ElInputNumMsg::Change(e))}
+                autocomplete="off" value={self.value.to_string()}  class="el-input__inner" />
+           </div>
+        </div>
+    )
     }
 }
 

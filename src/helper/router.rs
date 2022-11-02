@@ -49,29 +49,29 @@ fn switch(routes: &Route) -> Html {
 
 #[function_component(MyRoute)]
 pub fn root() -> Html {
-    html! {
+    html!(
         <BrowserRouter>
             { view_nav() }
             <Switch<Route> render={Switch::render(switch)} />
         </BrowserRouter>
-    }
+    )
 }
 
 
 fn render_nav_item(item: Route, name: String) -> Html {
-    html! {
+    html!(
             <li role="menuitem" tabindex="-1" class="el-menu-item " style="padding-left: 20px;">
             <i class="el-icon-document"></i>
             <span>
             <Link<Route>  to={item}>{ name }</Link<Route>>
             </span>
             </li>
-        }
+        )
 }
 
 
 fn view_nav() -> Html {
-    html! {
+    html!(
             <div>
             <div style="position: absolute;top: 0;left: 0; width: 200px;height: 100%;">
             <ul role="menubar" class="el-menu-vertical-demo el-menu">
@@ -81,5 +81,5 @@ fn view_nav() -> Html {
             </ul>
             </div>
             </div>
-        }
+        )
 }

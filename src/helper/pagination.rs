@@ -107,15 +107,15 @@ impl Pagination {
             let links = pages
                 .take(max_links - 2)
                 .map(|page| self.render_link(page, props));
-            html! {
+            html!(
                 <>
                     { for links }
                      <li class="el-icon more btn-quicknext el-icon-more"></li>
                     { last_link }
                 </>
-            }
+            )
         } else {
-            html! { for pages.map(|page| self.render_link(page, props)) }
+            html!(for pages.map(|page| self.render_link(page, props)) )
         }
     }
 

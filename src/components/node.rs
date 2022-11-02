@@ -36,7 +36,7 @@ impl Component for Nodes {
     }
 
     fn view(&self, _ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
             <div>
 
             <ElTable width={"100%"} data={self.nodes.clone()}>
@@ -46,7 +46,7 @@ impl Component for Nodes {
             <ElTableColumn label="系统" prop="status.nodeInfo.osImage" width="200"/>
             </ElTable>
             </div>
-        }
+        )
     }
 }
 
