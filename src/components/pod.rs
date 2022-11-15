@@ -12,7 +12,7 @@ use super::selectns::NameSpaceSelect;
 
 const ITEMS_PER_PAGE: u64 = 5;
 
-fn current_page(ctx: &Context<Pods>) -> u64 {
+fn current_page<T: Component>(ctx: &Context<T>) -> u64 {
     let location = ctx.link().location().unwrap();
     location.query::<PageQuery>().map(|it| it.page).unwrap_or(1)
 }
@@ -26,24 +26,28 @@ pub struct Pods {
     _listener: HistoryHandle,
 }
 
+fn gen_listener<T>(ctx: &Context<T>, name: String) -> HistoryHandle
+    where <T as yew::Component>::Message: From<AppMsg>, T: Component {
+    ctx.link().send_future(load_pods_future(None, None, Some("1".to_string()), name));
+    let link = ctx.link().clone();
+    let listener = ctx
+        .link()
+        .add_history_listener(link.callback(move |_| AppMsg::PageUpdated))
+        .unwrap();
+    listener
+}
+
 impl Component for Pods {
     type Message = AppMsg;
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(None, None, Some("1".to_string()), "pods".to_string()));
-        let link = ctx.link().clone();
-        let listener = ctx
-            .link()
-            .add_history_listener(link.callback(move |_| AppMsg::PageUpdated))
-            .unwrap();
-
         Self {
             ns: None,
             pods: vec![],
-            page: current_page(ctx),
+            page: current_page::<Pods>(ctx),
             total_items: 1,
-            _listener: listener,
+            _listener: gen_listener::<Pods>(ctx,"pods".to_string()),
         }
     }
 
@@ -63,7 +67,7 @@ impl Component for Pods {
                 self.total_items = total_items.parse().unwrap();
             }
             AppMsg::PageUpdated => {
-                self.page = current_page(ctx);
+                self.page = current_page::<Pods>(ctx);
                 ctx.link().send_future(load_pods_future(self.ns.clone(), None, Some(self.page.to_string()), "pods".to_string()));
             }
         }
