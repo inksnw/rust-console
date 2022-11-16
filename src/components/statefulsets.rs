@@ -20,6 +20,7 @@ pub struct StateFulSets {
     pub page: u64,
     pub total_items: u64,
     pub(crate) _listener: HistoryHandle,
+
 }
 
 
@@ -56,6 +57,7 @@ impl Component for StateFulSets {
             page: current_page::<StateFulSets>(ctx),
             total_items: 1,
             _listener: gen_listener::<StateFulSets>(ctx, "statefulsets".to_string()),
+
         }
     }
 
@@ -70,7 +72,7 @@ impl Component for StateFulSets {
 
         html! {
             <div>
-              {render_workload_nav()}
+              {render_workload_nav("statefulsets".to_string())}
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.data.clone()}>
             <ElTableColumn label="名称" prop="metadata.name" width="200"/>

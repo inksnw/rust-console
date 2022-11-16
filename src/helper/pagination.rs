@@ -1,4 +1,3 @@
-use gloo::console::log;
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -129,8 +128,6 @@ impl Pagination {
         let pages_prev = page.checked_sub(1).unwrap_or_default() as usize;
         let pages_next = (total_pages - page) as usize;
 
-        log!(format!("pages_prev: {}",pages_prev));
-        log!(format!("pages_prev: {}",pages_next));
 
         let links_left = LINKS_PER_SIDE.min(pages_prev)
             // if there are less than `LINKS_PER_SIDE` to the right, we add some more on the left.

@@ -1,5 +1,6 @@
 use serde_json::Value;
 use yew::{Context, Html, html};
+use yew::classes;
 use yew::prelude::Component;
 use yew_router::prelude::*;
 use yew_router::scope_ext::HistoryHandle;
@@ -59,26 +60,33 @@ pub trait Updatable<T = Self>
     }
 }
 
-pub fn render_workload_nav() -> Html {
+pub fn render_workload_nav(name: String) -> Html {
+    let list = vec![(Route::Deploy, "deploy"), (Route::DaemonSets, "daemonsets"), (Route::StateFulSets, "statefulsets")];
+
     html!(
         <div>
-            <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
-            <li role="menuitem" tabindex="0" class="el-menu-item">
-            <Link<Route>  to={Route::Deploy}>
-                 {"Deploy"}
-            </Link<Route>>
-            </li>
-            <li role="menuitem" tabindex="1" class="el-menu-item">
-            <Link<Route>  to={Route::DaemonSets}>
-                 {"DaemonSets"}
-            </Link<Route>>
-            </li>
-            <li role="menuitem" tabindex="2" class="el-menu-item">
-            <Link<Route>  to={Route::StateFulSets}>
-                 {"StateFulSets"}
-            </Link<Route>>
-            </li>
-            </ul>
+        <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
+        {
+        for list.iter().map(|item|{
+         html!(
+            if item.1==name{
+                 <li  role="menuitem" tabindex="0" class={classes!("el-menu-item","is-active") }>
+                <Link<Route> to={item.0.clone()}>
+                { item.1 }
+                </Link<Route>>
+                 </li>
+            }else{
+
+                <li  role="menuitem" tabindex="0" class={classes!("el-menu-item") }>
+                <Link<Route> to={item.0.clone()}>
+                { item.1 }
+                </Link<Route>>
+               </li>
+            }
+           )
+       	    })
+        }
+        </ul>
         </div>
     )
 }

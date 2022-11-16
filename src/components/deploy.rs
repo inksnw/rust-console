@@ -19,6 +19,7 @@ pub struct Deploy {
     pub page: u64,
     pub total_items: u64,
     pub(crate) _listener: HistoryHandle,
+
 }
 
 impl Updatable for Deploy {
@@ -54,6 +55,7 @@ impl Component for Deploy {
             page: base::current_page::<Deploy>(ctx),
             total_items: 1,
             _listener: base::gen_listener::<Deploy>(ctx, "deployments".to_string()),
+
         }
     }
 
@@ -67,7 +69,7 @@ impl Component for Deploy {
         let total_pages = if total_pages == 0 { 1 } else { total_pages };
         html!(
             <div>
-            {base::render_workload_nav()}
+            {base::render_workload_nav("deploy".to_string())}
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.data.clone()}>
              <ElTableColumn label="名称" prop="metadata.name" width="200"/>
