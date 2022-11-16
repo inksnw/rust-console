@@ -1,40 +1,49 @@
+use serde_json::Value;
 use yew::{Context, Html, html};
 use yew::prelude::Component;
-use yew_router::prelude::*;
 use yew_router::scope_ext::HistoryHandle;
 
-use crate::apis::app::{AppMsg, load_pods_future};
+use crate::apis::app::AppMsg;
+use crate::components::base::{current_page, gen_listener};
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
-use crate::helper::pagination::{PageQuery, Pagination};
+use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
 
+use super::base::Updatable;
 use super::selectns::NameSpaceSelect;
 
-const ITEMS_PER_PAGE: u64 = 5;
-
-fn current_page<T: Component>(ctx: &Context<T>) -> u64 {
-    let location = ctx.link().location().unwrap();
-    location.query::<PageQuery>().map(|it| it.page).unwrap_or(1)
-}
+pub const ITEMS_PER_PAGE: u64 = 5;
 
 
 pub struct Pods {
-    ns: Option<String>,
-    pods: Vec<serde_json::Value>,
-    page: u64,
-    total_items: u64,
-    _listener: HistoryHandle,
+    pub ns: Option<String>,
+    pub pods: Vec<serde_json::Value>,
+    pub page: u64,
+    pub total_items: u64,
+    pub(crate) _listener: HistoryHandle,
 }
 
-fn gen_listener<T>(ctx: &Context<T>, name: String) -> HistoryHandle
-    where <T as yew::Component>::Message: From<AppMsg>, T: Component {
-    ctx.link().send_future(load_pods_future(None, None, Some("1".to_string()), name));
-    let link = ctx.link().clone();
-    let listener = ctx
-        .link()
-        .add_history_listener(link.callback(move |_| AppMsg::PageUpdated))
-        .unwrap();
-    listener
+
+impl Updatable for Pods {
+    fn ns(&self) -> Option<String> {
+        (self.ns).clone()
+    }
+    fn page(&self) -> u64 { self.page }
+    fn update_pods(&mut self, pods: Vec<Value>) {
+        self.pods = pods
+    }
+    fn update_ns(&mut self, value: Option<String>) {
+        self.ns = value
+    }
+    fn update_page(&mut self, page: u64) {
+        self.page = page
+    }
+    fn update_total_item(&mut self, total_item: u64) {
+        self.total_items = total_item
+    }
+    fn total_items(&self) -> u64 {
+        self.total_items
+    }
 }
 
 impl Component for Pods {
@@ -47,36 +56,17 @@ impl Component for Pods {
             pods: vec![],
             page: current_page::<Pods>(ctx),
             total_items: 1,
-            _listener: gen_listener::<Pods>(ctx,"pods".to_string()),
+            _listener: gen_listener::<Pods>(ctx, "pods".to_string()),
         }
     }
 
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            AppMsg::UpdateNs(newvalue) => {
-                self.ns = Some(newvalue.value);
-                self.page = 1;
-                ctx.link().send_future(load_pods_future(self.ns.clone(), None, Some("1".to_string()), "pods".to_string()));
-            }
-            AppMsg::LoadPodsDone(pods_str) => {
-                let tmp: serde_json::Value = serde_json::from_str(pods_str.as_str()).unwrap();
-                let tmp1 = tmp.get("items").unwrap().to_string();
-
-                let total_items = tmp.get("total_items").unwrap().to_string();
-                self.pods = serde_json::from_str(&tmp1[..]).unwrap();
-                self.total_items = total_items.parse().unwrap();
-            }
-            AppMsg::PageUpdated => {
-                self.page = current_page::<Pods>(ctx);
-                ctx.link().send_future(load_pods_future(self.ns.clone(), None, Some(self.page.to_string()), "pods".to_string()));
-            }
-        }
-        true
+        Updatable::update(self, ctx, msg, "pods".to_string())
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let page = self.page;
-        let total_pages = (self.total_items + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
+        let page = self.page();
+        let total_pages = (self.total_items() + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
         let total_pages = if total_pages == 0 { 1 } else { total_pages };
 
         html! {
@@ -97,6 +87,3 @@ impl Component for Pods {
         }
     }
 }
-
-
-

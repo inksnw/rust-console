@@ -5,3 +5,4 @@ pub mod node;
 pub mod pod_detail;
 pub mod event;
 pub mod form;
+pub mod base;
