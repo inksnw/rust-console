@@ -1,11 +1,12 @@
 use serde_json::Value;
-use yew::Context;
+use yew::{Context, Html, html};
 use yew::prelude::Component;
 use yew_router::prelude::*;
 use yew_router::scope_ext::HistoryHandle;
 
 use crate::apis::app::{AppMsg, load_data_future};
 use crate::helper::pagination::PageQuery;
+use crate::helper::router::Route;
 
 pub fn current_page<T: Component>(ctx: &Context<T>) -> u64 {
     let location = ctx.link().location().unwrap();
@@ -56,4 +57,28 @@ pub trait Updatable<T = Self>
         }
         true
     }
+}
+
+pub fn render_workload_nav() -> Html {
+    html!(
+        <div>
+            <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
+            <li role="menuitem" tabindex="0" class="el-menu-item">
+            <Link<Route>  to={Route::Deploy}>
+                 {"Deploy"}
+            </Link<Route>>
+            </li>
+            <li role="menuitem" tabindex="1" class="el-menu-item">
+            <Link<Route>  to={Route::DaemonSets}>
+                 {"DaemonSets"}
+            </Link<Route>>
+            </li>
+            <li role="menuitem" tabindex="2" class="el-menu-item">
+            <Link<Route>  to={Route::StateFulSets}>
+                 {"StateFulSets"}
+            </Link<Route>>
+            </li>
+            </ul>
+        </div>
+    )
 }

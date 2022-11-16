@@ -4,12 +4,11 @@ use yew::prelude::Component;
 use yew_router::scope_ext::HistoryHandle;
 
 use crate::apis::app::AppMsg;
-use crate::components::base::{current_page, gen_listener};
+use crate::components::base::{current_page, gen_listener, render_workload_nav, Updatable};
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
 use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
 
-use super::base::Updatable;
 use super::selectns::NameSpaceSelect;
 
 pub const ITEMS_PER_PAGE: u64 = 5;
@@ -25,7 +24,8 @@ pub struct StateFulSets {
 
 
 impl Updatable for StateFulSets {
-    fn ns(&self) -> Option<String> { self.ns.clone()
+    fn ns(&self) -> Option<String> {
+        self.ns.clone()
     }
     fn page(&self) -> u64 { self.page }
     fn update_data(&mut self, data: Vec<Value>) {
@@ -70,6 +70,7 @@ impl Component for StateFulSets {
 
         html! {
             <div>
+              {render_workload_nav()}
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.data.clone()}>
             <ElTableColumn label="名称" prop="metadata.name" width="200"/>

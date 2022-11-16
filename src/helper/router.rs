@@ -99,9 +99,7 @@ fn view_nav() -> Html {
             <div style="position: absolute;top: 0;left: 0; width: 200px;height: 100%;">
             <ul role="menubar" class="el-menu-vertical-demo el-menu">
             {{ render_nav_item(Route::Home,"nodes".to_string())}}
-            {{ render_nav_item(Route::Deploy,"deploy".to_string())}}
-            {{ render_nav_item(Route::DaemonSets,"daemonsets".to_string())}}
-            {{ render_nav_item(Route::StateFulSets,"statefulsets".to_string())}}
+            {{ render_nav_item(Route::Deploy,"工作负载".to_string())}}
             {{ render_nav_item(Route::Pods,"pods".to_string())}}
             {{ render_nav_item(Route::Jobs,"jobs".to_string())}}
             {{ render_nav_item(Route::Services,"Services".to_string())}}

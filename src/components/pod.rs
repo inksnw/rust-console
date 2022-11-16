@@ -25,7 +25,8 @@ pub struct Pods {
 
 
 impl Updatable for Pods {
-    fn ns(&self) -> Option<String> { self.ns.clone()
+    fn ns(&self) -> Option<String> {
+        self.ns.clone()
     }
     fn page(&self) -> u64 { self.page }
     fn update_data(&mut self, data: Vec<Value>) {

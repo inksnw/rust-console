@@ -45,7 +45,7 @@ impl Component for PodDetail {
             <div>
             <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
             <li role="menuitem" tabindex="0" class="el-menu-item is-active">{{"资源状态"}}</li>
-            <li role="menuitem" tabindex="0" class="el-menu-item">
+            <li role="menuitem" tabindex="1" class="el-menu-item">
             <Link<Route>  to={Route::Event{ns:ctx.props().ns.clone(),id:ctx.props().name.clone()}}>
                 { {"事件"} }
             </Link<Route>>
