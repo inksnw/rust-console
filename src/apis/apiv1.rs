@@ -1,5 +1,6 @@
-use gloo_net::http::Request;
 use std::future::Future;
+
+use gloo_net::http::Request;
 
 use crate::element_ui::ValueText;
 
@@ -7,7 +8,6 @@ pub enum NamespaceMsg {
     LoadNS,
     LoadNSDone(String),
     Onchange(ValueText),
-
 }
 
 

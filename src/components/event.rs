@@ -2,7 +2,7 @@ use yew::{Context, Html, html, Properties};
 use yew::prelude::Component;
 use yew_router::prelude::*;
 
-use crate::apis::app::{AppMsg, load_pods_future};
+use crate::apis::app::{AppMsg, load_data_future};
 use crate::element_ui::table::ElTable;
 use crate::element_ui::table::ElTableColumn;
 use crate::helper::router::Route;
@@ -22,7 +22,7 @@ impl Component for Event {
     type Properties = EventProp;
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), None, None, "events".to_string()));
+        ctx.link().send_future(load_data_future(Some(ctx.props().ns.to_string()), None, None, "events".to_string()));
         Self {
             pods: vec![],
         }
@@ -31,7 +31,7 @@ impl Component for Event {
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             AppMsg::UpdateNs(_) => {}
-            AppMsg::LoadPodsDone(pods_str) => {
+            AppMsg::LoadDataDone(pods_str) => {
                 let tmp: serde_json::Value = serde_json::from_str(pods_str.as_str()).unwrap();
                 let tmp1 = tmp.get("items").unwrap().to_string();
                 self.pods = serde_json::from_str(&tmp1[..]).unwrap();

@@ -17,7 +17,7 @@ pub const ITEMS_PER_PAGE: u64 = 5;
 
 pub struct Pods {
     pub ns: Option<String>,
-    pub pods: Vec<serde_json::Value>,
+    pub data: Vec<Value>,
     pub page: u64,
     pub total_items: u64,
     pub(crate) _listener: HistoryHandle,
@@ -25,12 +25,11 @@ pub struct Pods {
 
 
 impl Updatable for Pods {
-    fn ns(&self) -> Option<String> {
-        (self.ns).clone()
+    fn ns(&self) -> Option<String> { self.ns.clone()
     }
     fn page(&self) -> u64 { self.page }
-    fn update_pods(&mut self, pods: Vec<Value>) {
-        self.pods = pods
+    fn update_data(&mut self, data: Vec<Value>) {
+        self.data = data
     }
     fn update_ns(&mut self, value: Option<String>) {
         self.ns = value
@@ -53,7 +52,7 @@ impl Component for Pods {
     fn create(ctx: &Context<Self>) -> Self {
         Self {
             ns: None,
-            pods: vec![],
+            data: vec![],
             page: current_page::<Pods>(ctx),
             total_items: 1,
             _listener: gen_listener::<Pods>(ctx, "pods".to_string()),
@@ -72,7 +71,7 @@ impl Component for Pods {
         html! {
             <div>
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
-            <ElTable width={"100%"} data={self.pods.clone()}>
+            <ElTable width={"100%"} data={self.data.clone()}>
             <ElTableColumn label="pod名" prop="metadata.name" width="200"/>
             <ElTableColumn label="状态" prop="status.phase"/>
             <ElTableColumn label="节点" prop="status.hostIP" width="200"/>

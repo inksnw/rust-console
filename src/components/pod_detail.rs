@@ -4,12 +4,12 @@ use yew::prelude::Component;
 use yew::Properties;
 use yew_router::prelude::*;
 
-use crate::apis::app::{AppMsg, load_pods_future};
+use crate::apis::app::{AppMsg, load_data_future};
 use crate::helper::router::Route;
 use crate::helper::utils::get_json_value;
 
 pub struct PodDetail {
-    pods: Value,
+    data: Value,
 }
 
 #[derive(Clone, PartialEq, Properties)]
@@ -23,17 +23,16 @@ impl Component for PodDetail {
     type Properties = PodDetailProp;
 
     fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(load_pods_future(Some(ctx.props().ns.to_string()), Some(ctx.props().name.to_string()), None, "pods".to_string()));
+        ctx.link().send_future(load_data_future(Some(ctx.props().ns.to_string()), Some(ctx.props().name.to_string()), None, "pods".to_string()));
         Self {
-            pods: Value::String(String::new()),
+            data: Value::String(String::new()),
         }
     }
 
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
-            AppMsg::UpdateNs(_) => {}
-            AppMsg::LoadPodsDone(pods_str) => {
-                self.pods = serde_json::from_str(pods_str.as_str()).unwrap();
+            AppMsg::LoadDataDone(data) => {
+                self.data = serde_json::from_str(data.as_str()).unwrap();
             }
             _ => {}
         }
@@ -42,7 +41,7 @@ impl Component for PodDetail {
 
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        html! {
+        html!(
             <div>
             <ul role="menubar" class="el-menu-demo el-menu--horizontal el-menu">
             <li role="menuitem" tabindex="0" class="el-menu-item is-active">{{"资源状态"}}</li>
@@ -54,28 +53,28 @@ impl Component for PodDetail {
             </ul>
             { self.info()}
             </div>
-        }
+        )
     }
 }
 
 
 impl PodDetail {
     fn td(&self, k: String, v: String) -> Html {
-        html! {
+        html!(
             <td colspan="1" class="el-descriptions-item el-descriptions-item__cell">
                 <div class="el-descriptions-item__container">
                     <span class="el-descriptions-item__label has-colon ">{k}</span>
                     <span class="el-descriptions-item__content">{v}</span>
                 </div>
             </td>
-        }
+        )
     }
 
     fn info(&self) -> Html {
         let empty_value = Value::String(String::new());
-        let qos_class = get_json_value("status.qosClass", &self.pods, &empty_value);
-        let name = get_json_value("metadata.name", &self.pods, &empty_value);
-        let create_time = get_json_value("metadata.creationTimestamp", &self.pods, &empty_value);
+        let qos_class = get_json_value("status.qosClass", &self.data, &empty_value);
+        let name = get_json_value("metadata.name", &self.data, &empty_value);
+        let create_time = get_json_value("metadata.creationTimestamp", &self.data, &empty_value);
 
         html! {
             <div class="el-descriptions">
@@ -87,9 +86,6 @@ impl PodDetail {
                             {self.td("服务等级".to_string(),qos_class)}
                             {self.td("创建时间".to_string(),create_time)}
                         </tr>
-
-
-
                         </tbody>
                     </table>
                 </div>
