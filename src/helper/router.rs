@@ -1,7 +1,14 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::components::{deploy::Deploy, event::Event, form::FormTest, node::Nodes, pod::Pods, pod_detail::PodDetail};
+use crate::components::{
+    daemonsets::DaemonSets, deploy::Deploy,
+    event::Event, form::FormTest,
+    jobs::Jobs, node::Nodes,
+    pod::Pods, pod_detail::PodDetail,
+    services::Services,
+    statefulsets::StateFulSets,
+};
 
 #[derive(Routable, PartialEq, Eq, Clone, Debug)]
 pub enum Route {
@@ -15,6 +22,14 @@ pub enum Route {
     PodDetail { ns: String, id: String },
     #[at("/Deployment")]
     Deploy,
+    #[at("/DaemonSets")]
+    DaemonSets,
+    #[at("/StateFulSets")]
+    StateFulSets,
+    #[at("/Jobs")]
+    Jobs,
+    #[at("/Services")]
+    Services,
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -31,6 +46,14 @@ fn switch(routes: &Route) -> Html {
             <div style="margin-left: 200px;height: 100%;"><Pods/></div>},
         Route::Deploy => html! {
             <div style="margin-left: 200px;height: 100%;"><Deploy/></div>},
+        Route::DaemonSets => html! {
+            <div style="margin-left: 200px;height: 100%;"><DaemonSets/></div>},
+        Route::StateFulSets => html! {
+            <div style="margin-left: 200px;height: 100%;"><StateFulSets/></div>},
+        Route::Jobs => html! {
+            <div style="margin-left: 200px;height: 100%;"><Jobs/></div>},
+        Route::Services => html! {
+            <div style="margin-left: 200px;height: 100%;"><Services/></div>},
         Route::NotFound => html! {
              <div style="margin-left: 200px;height: 100%;"><h1>{ "404" }</h1></div>
         },
@@ -77,7 +100,11 @@ fn view_nav() -> Html {
             <ul role="menubar" class="el-menu-vertical-demo el-menu">
             {{ render_nav_item(Route::Home,"nodes".to_string())}}
             {{ render_nav_item(Route::Deploy,"deploy".to_string())}}
+            {{ render_nav_item(Route::DaemonSets,"daemonsets".to_string())}}
+            {{ render_nav_item(Route::StateFulSets,"statefulsets".to_string())}}
             {{ render_nav_item(Route::Pods,"pods".to_string())}}
+            {{ render_nav_item(Route::Jobs,"jobs".to_string())}}
+            {{ render_nav_item(Route::Services,"Services".to_string())}}
             </ul>
             </div>
             </div>

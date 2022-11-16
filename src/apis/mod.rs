@@ -1,6 +1,6 @@
 pub mod app;
 pub mod apiv1;
-pub mod detail;
+
 
 const BASE_URL: &str = "http://localhost:9090";
 
