@@ -40,10 +40,14 @@ impl Component for Nodes {
             <div>
 
             <ElTable width={"100%"} data={self.nodes.clone()}>
-            <ElTableColumn label="名称" prop="metadata.name" width="200"/>
-            <ElTableColumn label="IP" prop="status.addresses.0.address" width="200"/>
-            <ElTableColumn label="架构" prop="status.nodeInfo.architecture" width="200"/>
+            <ElTableColumn label="名称" prop="metadata.name" width="100"/>
+            <ElTableColumn label="IP" prop="status.addresses.0.address" width="120"/>
+            <ElTableColumn label="cpu" prop="status.capacity.cpu" width="100"/>
+            <ElTableColumn label="内存" prop="status.capacity.memory" width="100"/>
+            <ElTableColumn label="最大Pod数" prop="status.capacity.pods" width="100"/>
+            <ElTableColumn label="架构" prop="status.nodeInfo.architecture" width="100"/>
             <ElTableColumn label="系统" prop="status.nodeInfo.osImage" width="200"/>
+            <ElTableColumn label="容器类型" prop="status.nodeInfo.containerRuntimeVersion" width="200"/>
             </ElTable>
             </div>
         )
