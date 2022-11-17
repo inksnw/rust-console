@@ -7,7 +7,7 @@ pub struct SwitchProps {
     #[prop_or_default]
     pub value: bool,
     #[prop_or_default]
-    pub style: &'static str,    //这里直接加入style 设置， 懒得 用width了
+    pub style: &'static str,
 
     #[prop_or(false)]
     pub disabled: bool,

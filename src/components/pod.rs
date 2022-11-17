@@ -4,12 +4,11 @@ use yew::prelude::Component;
 use yew_router::scope_ext::HistoryHandle;
 
 use crate::apis::app::AppMsg;
-use crate::components::base::{current_page, gen_listener};
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
 use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
 
-use super::base::Updatable;
+use super::base::{self, Updatable};
 use super::selectns::NameSpaceSelect;
 
 pub const ITEMS_PER_PAGE: u64 = 5;
@@ -54,9 +53,9 @@ impl Component for Pods {
         Self {
             ns: None,
             data: vec![],
-            page: current_page::<Pods>(ctx),
+            page: base::current_page::<Pods>(ctx),
             total_items: 1,
-            _listener: gen_listener::<Pods>(ctx, "pods".to_string()),
+            _listener: base::gen_listener::<Pods>(ctx, "pods".to_string()),
         }
     }
 

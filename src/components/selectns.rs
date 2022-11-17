@@ -5,7 +5,7 @@ use yew::Properties;
 use crate::apis::apiv1::*;
 use crate::element_ui::select::ElSelect;
 use crate::element_ui::ValueText;
-use crate::helper::utils::get_json_value;
+use crate::helper::utils;
 
 #[derive(Properties, PartialEq)]
 pub struct NamespaceProps {
@@ -60,8 +60,8 @@ impl NameSpaceSelect {
         let empty_value = Value::String(String::new());
         let nsdata = self.ns_list.iter().
             map(|item| ValueText {
-                value: get_json_value("metadata.name", item, &empty_value),
-                text: get_json_value("metadata.name", item, &empty_value),
+                value: utils::get_json_value("metadata.name", item, &empty_value),
+                text: utils::get_json_value("metadata.name", item, &empty_value),
             }).collect::<Vec<ValueText>>();
         html! {
         <ElSelect data={nsdata} onchange={ctx.link().callback(NamespaceMsg::Onchange)} />

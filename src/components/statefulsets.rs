@@ -4,7 +4,7 @@ use yew::prelude::Component;
 use yew_router::scope_ext::HistoryHandle;
 
 use crate::apis::app::AppMsg;
-use crate::components::base::{current_page, gen_listener, render_workload_nav, Updatable};
+use crate::components::base::{self, Updatable};
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
 use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
@@ -54,9 +54,9 @@ impl Component for StateFulSets {
         Self {
             ns: None,
             data: vec![],
-            page: current_page::<StateFulSets>(ctx),
+            page: base::current_page::<StateFulSets>(ctx),
             total_items: 1,
-            _listener: gen_listener::<StateFulSets>(ctx, "statefulsets".to_string()),
+            _listener: base::gen_listener::<StateFulSets>(ctx, "statefulsets".to_string()),
 
         }
     }
@@ -72,7 +72,7 @@ impl Component for StateFulSets {
 
         html! {
             <div>
-              {render_workload_nav("statefulsets".to_string())}
+              {base::render_workload_nav("statefulsets".to_string())}
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.data.clone()}>
             <ElTableColumn label="名称" prop="metadata.name" width="200"/>

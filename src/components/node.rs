@@ -2,8 +2,7 @@ use yew::{Context, Html, html};
 use yew::prelude::Component;
 
 use crate::apis::apiv1::{load_ns_future, NamespaceMsg};
-use crate::element_ui::table::ElTable;
-use crate::element_ui::table::ElTableColumn;
+use crate::element_ui::table::{ElTable, ElTableColumn};
 
 pub struct Nodes {
     nodes: Vec<serde_json::Value>,

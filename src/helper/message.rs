@@ -6,13 +6,6 @@ use wasm_bindgen::prelude::*;
 
 use super::js::{create_element, get_body, get_by_id};
 
-// 大概的样式如下
-// <div class={format!("el-message is-closable el-message--{}",_ctx.props().msg_type)} 
-//        style="top: 20px; z-index: 2020;transform: translateY(100%)">
-//           <i class="el-message__icon el-icon-success"></i>
-//           <p class="el-message__content">这里填的是text</p>
-//            <i class="el-message__closeBtn el-icon-close"></i>
-//         </div>
 // 弹出成功消息框
 fn message(msg_type: &str, msg: &str) {
     let body = get_body().unwrap();

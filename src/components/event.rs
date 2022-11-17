@@ -3,8 +3,7 @@ use yew::prelude::Component;
 use yew_router::prelude::*;
 
 use crate::apis::app::{AppMsg, load_data_future};
-use crate::element_ui::table::ElTable;
-use crate::element_ui::table::ElTableColumn;
+use crate::element_ui::table::{ElTable, ElTableColumn};
 use crate::helper::router::Route;
 
 pub struct Event {
