@@ -8,6 +8,7 @@ use crate::components::base::{self, Updatable};
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
 use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
+use crate::helper::websocket::WebsocketService;
 
 use super::selectns::NameSpaceSelect;
 
@@ -49,6 +50,7 @@ impl Component for Deploy {
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
+        WebsocketService::new();
         Self {
             ns: None,
             data: vec![],
