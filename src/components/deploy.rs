@@ -8,7 +8,6 @@ use crate::components::base::{self, Updatable};
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
 use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
-use crate::helper::websocket::WebsocketService;
 
 use super::selectns::NameSpaceSelect;
 
@@ -50,7 +49,7 @@ impl Component for Deploy {
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
-        WebsocketService::new();
+
         Self {
             ns: None,
             data: vec![],
@@ -80,7 +79,7 @@ impl Component for Deploy {
                 <ElTableLink href={"/a?name=$1&ns=$2"} params={vec!("metadata.name","metadata.namespace")} label="删除"/>
             </ElTableColumn>
             </ElTable>
-            <Pagination {page} total_pages={total_pages} route_to_page={Route::Pods}/>
+            <Pagination {page} total_pages={total_pages} route_to_page={Route::Deploy}/>
             </div>
         )
     }
