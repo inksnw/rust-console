@@ -103,7 +103,7 @@ impl ElTable {
         let namespace = utils::get_json_value("metadata.namespace", row, &empty_value);
         let kind = utils::get_json_value("kind", row, &empty_value);
         let url = if namespace == "" { format!("{}/{}", kind, value) } else { format!("{}/{}/{}", kind, namespace, value) };
-
+        //todo 把a标签换成link,确保单页应用
         if !children.is_empty() {
             html!(
             <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
@@ -124,7 +124,6 @@ impl ElTable {
             html!(
             <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
             <div class="cell">
-
              if query=="metadata.name"{
                      <a href={ url }> {value} </a>
                 }else{
