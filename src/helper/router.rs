@@ -2,13 +2,15 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::components::{
-    daemonsets::DaemonSets, deploy::Deploy,
-    event::Event, form::FormTest,
-    jobs::Jobs, node::Nodes,
-    pod::Pods, pod_detail::PodDetail,
-    services::Services,
-    statefulsets::StateFulSets,
+    form::FormTest,
+    pod_detail::PodDetail,
 };
+use crate::components::list::{
+    daemonsets::DaemonSets, deploy::Deploy,
+    event::Event, jobs::Jobs, node::Nodes,
+    pod::Pods, services::Services,
+};
+use crate::components::list::statefulsets::StateFulSets;
 
 #[derive(Routable, PartialEq, Eq, Clone, Debug)]
 pub enum Route {

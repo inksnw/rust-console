@@ -4,26 +4,25 @@ use yew::prelude::Component;
 use yew_router::scope_ext::HistoryHandle;
 
 use crate::apis::app::AppMsg;
+use crate::components::list::base;
+use crate::components::list::base::Updatable;
+use crate::components::selectns::NameSpaceSelect;
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
 use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
 
-use super::base::{self, Updatable};
-use super::selectns::NameSpaceSelect;
-
 pub const ITEMS_PER_PAGE: u64 = 5;
 
-
-pub struct Jobs {
+pub struct Deploy {
     pub ns: Option<String>,
     pub data: Vec<Value>,
     pub page: u64,
     pub total_items: u64,
     pub(crate) _listener: HistoryHandle,
+
 }
 
-
-impl Updatable for Jobs {
+impl Updatable for Deploy {
     fn ns(&self) -> Option<String> {
         self.ns.clone()
     }
@@ -45,7 +44,7 @@ impl Updatable for Jobs {
     }
 }
 
-impl Component for Jobs {
+impl Component for Deploy {
     type Message = AppMsg;
     type Properties = ();
 
@@ -53,33 +52,37 @@ impl Component for Jobs {
         Self {
             ns: None,
             data: vec![],
-            page: base::current_page::<Jobs>(ctx),
+            page: base::current_page::<Deploy>(ctx),
             total_items: 1,
-            _listener: base::gen_listener::<Jobs>(ctx, "jobs".to_string()),
+            _listener: base::gen_listener::<Deploy>(ctx, "deployments".to_string()),
+
         }
     }
 
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
-        Updatable::update(self, ctx, msg, "jobs".to_string())
+        Updatable::update(self, ctx, msg, "deployments".to_string())
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let page = self.page();
         let total_pages = (self.total_items() + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
         let total_pages = if total_pages == 0 { 1 } else { total_pages };
-
-        html! {
+        html!(
             <div>
+            {base::render_workload_nav("deploy".to_string())}
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.data.clone()}>
-            <ElTableColumn label="名称" prop="metadata.name" width="200"/>
-            <ElTableColumn label="创建时间" prop="metadata.creationTimestamp" width="200"/>
+             <ElTableColumn label="名称" prop="metadata.name" width="200"/>
+            <ElTableColumn label="名称空间" prop="metadata.namespace" width="200"/>
              <ElTableColumn label="操作">
                 <ElTableLink href={"/a?name=$1&ns=$2"} params={vec!("metadata.name","metadata.namespace")} label="删除"/>
             </ElTableColumn>
             </ElTable>
-            <Pagination {page} total_pages={total_pages} route_to_page={Route::Jobs}/>
+            <Pagination {page} total_pages={total_pages} route_to_page={Route::Deploy}/>
             </div>
-        }
+        )
     }
 }
+
+
+

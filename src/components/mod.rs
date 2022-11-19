@@ -1,12 +1,5 @@
-pub mod pod;
-pub mod deploy;
 mod selectns;
-pub mod node;
 pub mod pod_detail;
-pub mod event;
 pub mod form;
-pub mod base;
-pub mod statefulsets;
-pub mod daemonsets;
-pub mod jobs;
-pub mod services;
+
+pub mod list;

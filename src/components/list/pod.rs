@@ -4,17 +4,18 @@ use yew::prelude::Component;
 use yew_router::scope_ext::HistoryHandle;
 
 use crate::apis::app::AppMsg;
+use crate::components::selectns::NameSpaceSelect;
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
 use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
 
-use super::base::{self, Updatable};
-use super::selectns::NameSpaceSelect;
+use super::base;
+use super::base::Updatable;
 
 pub const ITEMS_PER_PAGE: u64 = 5;
 
 
-pub struct Services {
+pub struct Pods {
     pub ns: Option<String>,
     pub data: Vec<Value>,
     pub page: u64,
@@ -23,7 +24,7 @@ pub struct Services {
 }
 
 
-impl Updatable for Services {
+impl Updatable for Pods {
     fn ns(&self) -> Option<String> {
         self.ns.clone()
     }
@@ -45,7 +46,7 @@ impl Updatable for Services {
     }
 }
 
-impl Component for Services {
+impl Component for Pods {
     type Message = AppMsg;
     type Properties = ();
 
@@ -53,14 +54,14 @@ impl Component for Services {
         Self {
             ns: None,
             data: vec![],
-            page: base::current_page::<Services>(ctx),
+            page: base::current_page::<Pods>(ctx),
             total_items: 1,
-            _listener: base::gen_listener::<Services>(ctx, "services".to_string()),
+            _listener: base::gen_listener::<Pods>(ctx, "pods".to_string()),
         }
     }
 
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
-        Updatable::update(self, ctx, msg, "services".to_string())
+        Updatable::update(self, ctx, msg, "pods".to_string())
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
@@ -72,13 +73,16 @@ impl Component for Services {
             <div>
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.data.clone()}>
-            <ElTableColumn label="名称" prop="metadata.name" width="200"/>
+            <ElTableColumn label="pod名" prop="metadata.name" width="200"/>
+            <ElTableColumn label="状态" prop="status.phase"/>
+            <ElTableColumn label="节点" prop="status.hostIP" width="200"/>
+            <ElTableColumn label="父级" prop="metadata.ownerReferences.0.kind" width="200"/>
             <ElTableColumn label="创建时间" prop="metadata.creationTimestamp" width="200"/>
              <ElTableColumn label="操作">
                 <ElTableLink href={"/a?name=$1&ns=$2"} params={vec!("metadata.name","metadata.namespace")} label="删除"/>
             </ElTableColumn>
             </ElTable>
-            <Pagination {page} total_pages={total_pages} route_to_page={Route::Services}/>
+            <Pagination {page} total_pages={total_pages} route_to_page={Route::Pods}/>
             </div>
         }
     }

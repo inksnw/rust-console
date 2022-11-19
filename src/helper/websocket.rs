@@ -2,8 +2,6 @@ use futures::{channel::mpsc::Sender, SinkExt, StreamExt};
 use log;
 use reqwasm::websocket::{futures::WebSocket, Message};
 use wasm_bindgen_futures::spawn_local;
-use crate::apis::app::AppMsg;
-
 
 pub struct WebsocketService {
     pub tx: Sender<String>,
@@ -29,7 +27,6 @@ impl WebsocketService {
             while let Some(msg) = read.next().await {
                 match msg {
                     Ok(Message::Text(data)) => {
-                        AppMsg::PageUpdated;
                         log::debug!("from websocket: {}", data);
                     }
                     Ok(Message::Bytes(b)) => {
