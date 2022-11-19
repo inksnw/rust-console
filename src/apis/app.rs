@@ -8,6 +8,7 @@ pub enum AppMsg {
     UpdateNs(ValueText),
     LoadDataDone(String),
     PageUpdated,
+    HandleMsg(String),
 
 }
 

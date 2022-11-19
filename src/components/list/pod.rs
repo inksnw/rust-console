@@ -1,11 +1,13 @@
 use serde_json::Value;
 use yew::{Context, Html, html};
 use yew::prelude::Component;
+use yew_agent::{Bridge, Bridged};
 use yew_router::scope_ext::HistoryHandle;
 
 use crate::apis::app::AppMsg;
 use crate::components::selectns::NameSpaceSelect;
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
+use crate::helper::event_bus::EventBus;
 use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
 
@@ -21,6 +23,7 @@ pub struct Pods {
     pub page: u64,
     pub total_items: u64,
     pub(crate) _listener: HistoryHandle,
+    _producer: Box<dyn Bridge<EventBus>>,
 }
 
 
@@ -57,6 +60,7 @@ impl Component for Pods {
             page: base::current_page::<Pods>(ctx),
             total_items: 1,
             _listener: base::gen_listener::<Pods>(ctx, "pods".to_string()),
+            _producer: EventBus::bridge(ctx.link().callback(AppMsg::HandleMsg)),
         }
     }
 

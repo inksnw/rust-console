@@ -2,7 +2,7 @@
 
 use wasm_bindgen::JsCast;
 use wasm_bindgen::JsValue;
-use web_sys::{console, Document, window};
+use web_sys::{Document, window};
 use web_sys::HtmlElement;
 
 // window.alert
@@ -10,14 +10,6 @@ pub fn alert(str: &str) {
     window().unwrap().alert_with_message(str).unwrap();
 }
 
-
-pub fn log(obj: &wasm_bindgen::JsValue) {
-    console::log_1(obj);
-}
-
-pub fn log_str(str: String) {
-    log(&wasm_bindgen::JsValue::from_str(str.as_str()));
-}
 
 // 获取 document
 pub fn get_document() -> Result<Document, JsValue> {

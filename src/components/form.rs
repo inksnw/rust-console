@@ -3,7 +3,6 @@ use yew::prelude::*;
 
 use crate::element_ui::{ElButton, ElCheckBox, ElForm,
                         ElFormItem, ElInput, ElInputNumber, ElSwitch};
-use crate::helper::js::log_str;
 use crate::helper::message::error;
 
 #[derive(Default, Serialize, Deserialize, Clone)]
@@ -59,7 +58,6 @@ impl Component for FormTest {
             }
             FormTestMsg::LogData => {
                 let str = serde_json::to_string_pretty(&self.data).unwrap();
-                log_str(str);
             }
         }
         true
