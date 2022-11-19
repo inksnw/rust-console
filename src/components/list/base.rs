@@ -52,10 +52,12 @@ pub trait Updatable<T = Self>
                 self.update_total_item(total_items.parse().unwrap());
             }
             AppMsg::PageUpdated => {
+                if current_page::<T>(ctx) != self.page() {
+                    ctx.link().send_future(load_data_future(self.ns().clone(), None, Some(self.page().to_string()), name));
+                }
                 self.update_page(current_page::<T>(ctx));
-                ctx.link().send_future(load_data_future(self.ns().clone(), None, Some(self.page().to_string()), name));
             }
-            AppMsg::HandleMsg(_msg)=>{
+            AppMsg::HandleMsg(_msg) => {
                 self.update_page(current_page::<T>(ctx));
                 ctx.link().send_future(load_data_future(self.ns().clone(), None, Some(self.page().to_string()), name));
             }
