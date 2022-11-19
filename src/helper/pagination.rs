@@ -126,7 +126,7 @@ impl Pagination {
         } = *props;
 
         let pages_prev = page.checked_sub(1).unwrap_or_default() as usize;
-        let pages_next = (total_pages - page) as usize;
+        let pages_next = total_pages.checked_sub(page).unwrap_or_default() as usize;
 
 
         let links_left = LINKS_PER_SIDE.min(pages_prev)
@@ -138,7 +138,7 @@ impl Pagination {
             <>
                 { self.render_links(1..page, pages_prev, links_left, props) }
                 { self.render_link(page, props) }
-                { self.render_links(page + 1..=total_pages, pages_next, links_right, props) }
+                { self.render_links(page + 1..=total_pages,  pages_next.try_into().unwrap(), links_right, props) }
             </>
         }
     }

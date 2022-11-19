@@ -30,7 +30,7 @@ impl WebsocketService {
             while let Some(msg) = read.next().await {
                 match msg {
                     Ok(Message::Text(data)) => {
-                        log::debug!("from websocket: {}", data);
+                        // log::debug!("from websocket: {}", data);
                         event_bus.send(Request::EventBusMsg(data));
                     }
                     Ok(Message::Bytes(b)) => {
