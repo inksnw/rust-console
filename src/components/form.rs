@@ -58,6 +58,7 @@ impl Component for FormTest {
             }
             FormTestMsg::LogData => {
                 let str = serde_json::to_string_pretty(&self.data).unwrap();
+                log::debug!("{}",str);
             }
         }
         true
