@@ -5,6 +5,7 @@ pub fn get_json_value(query: &str, data: &Value, empty: &Value) -> String {
     if query_list.len() <= 0 {
         "--".to_string();
     }
+
     let mut first: Option<&Value> = data.get(query_list.get(0).unwrap());
     query_list.iter().enumerate().for_each(|(i, key)| {
         if i > 0 {
