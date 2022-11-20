@@ -2,8 +2,9 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::components::{
+    detail::deploy::DeployDetail,
+    detail::pod::PodDetail,
     form::FormTest,
-    pod_detail::PodDetail,
 };
 use crate::components::list::{
     daemonsets::DaemonSets, deploy::Deploy,
@@ -24,6 +25,8 @@ pub enum Route {
     PodDetail { ns: String, id: String },
     #[at("/Deployment")]
     Deploy,
+    #[at("/Deployment/:ns/:id")]
+    DeployDetail { ns: String, id: String },
     #[at("/DaemonSets")]
     DaemonSets,
     #[at("/StateFulSets")]
@@ -41,33 +44,23 @@ pub enum Route {
 
 
 fn switch(routes: &Route) -> Html {
+    let style = "margin-left: 200px;height: 100%;";
     match routes {
-        Route::Home => html! {
-            <div style="margin-left: 200px;height: 100%;"><Nodes/></div>},
-        Route::Pods => html! {
-            <div style="margin-left: 200px;height: 100%;"><Pods/></div>},
-        Route::Deploy => html! {
-            <div style="margin-left: 200px;height: 100%;"><Deploy/></div>},
-        Route::DaemonSets => html! {
-            <div style="margin-left: 200px;height: 100%;"><DaemonSets/></div>},
-        Route::StateFulSets => html! {
-            <div style="margin-left: 200px;height: 100%;"><StateFulSets/></div>},
-        Route::Jobs => html! {
-            <div style="margin-left: 200px;height: 100%;"><Jobs/></div>},
-        Route::Services => html! {
-            <div style="margin-left: 200px;height: 100%;"><Services/></div>},
-        Route::NotFound => html! {
-             <div style="margin-left: 200px;height: 100%;"><h1>{ "404" }</h1></div>
-        },
+        Route::Home => html! {<div style={style}><Nodes/></div>},
+        Route::Pods => html! {<div style={style}><Pods/></div>},
+        Route::Deploy => html! {<div style={style}><Deploy/></div>},
+        Route::DaemonSets => html! {<div style={style}><DaemonSets/></div>},
+        Route::StateFulSets => html! {<div style={style}><StateFulSets/></div>},
+        Route::Jobs => html! {<div style={style}><Jobs/></div>},
+        Route::Services => html! {<div style={style}><Services/></div>},
+        Route::NotFound => html! { <div style={style}><h1>{ "404" }</h1></div>        },
+        Route::FormTest => html! {<div style={style}><FormTest/></div>},
         Route::PodDetail { ns, id } => html! {
-            <div style="margin-left: 200px;height: 100%;"><PodDetail ns={ns.clone()} name={id.clone()}/></div>
-        },
+            <div style={style}><PodDetail ns={ns.clone()} name={id.clone()}/></div>},
+        Route::DeployDetail { ns, id } => html! {
+            <div style={style}><DeployDetail ns={ns.clone()} name={id.clone()}/></div>},
         Route::Event { ns, id } => html! {
-            <div style="margin-left: 200px;height: 100%;"><Event ns={ns.clone()} name={id.clone()} /></div>
-        },
-        Route::FormTest => html! {
-            <div style="margin-left: 200px;height: 100%;"><FormTest  /></div>
-        }
+            <div style={style}><Event ns={ns.clone()} name={id.clone()} /></div>},
     }
 }
 
