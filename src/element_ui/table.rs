@@ -100,8 +100,10 @@ impl ElTable {
     fn render_cell(&self, row: &Value, children: ChildrenRenderer<VChild<ElTableLink>>, query: String) -> Html {
         let empty_value = Value::String(String::new());
         let value = utils::get_json_value(&query, row, &empty_value);
-        let namespace = utils::get_json_value("metadata.namespace", row, &empty_value);
-        let kind = utils::get_json_value("kind", row, &empty_value);
+        //todo 解决非string类型渲染
+
+        let namespace = utils::value2string(utils::get_json_value("metadata.namespace", row, &empty_value));
+        let kind = utils::value2string(utils::get_json_value("kind", row, &empty_value));
         let url = if namespace == "" { format!("{}/{}", kind, value) } else { format!("{}/{}/{}", kind, namespace, value) };
         //todo 把a标签换成link,确保单页应用
         if !children.is_empty() {

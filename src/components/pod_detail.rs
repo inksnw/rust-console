@@ -6,7 +6,7 @@ use yew_router::prelude::*;
 
 use crate::apis::app::{AppMsg, load_data_future};
 use crate::helper::router::Route;
-use crate::helper::utils::get_json_value;
+use crate::helper::utils::{get_json_value, value2string};
 
 pub struct PodDetail {
     data: Value,
@@ -72,9 +72,9 @@ impl PodDetail {
 
     fn info(&self) -> Html {
         let empty_value = Value::String(String::new());
-        let qos_class = get_json_value("status.qosClass", &self.data, &empty_value);
-        let name = get_json_value("metadata.name", &self.data, &empty_value);
-        let create_time = get_json_value("metadata.creationTimestamp", &self.data, &empty_value);
+        let qos_class = value2string(get_json_value("status.qosClass", &self.data, &empty_value));
+        let name = value2string(get_json_value("metadata.name", &self.data, &empty_value));
+        let create_time = value2string(get_json_value("metadata.creationTimestamp", &self.data, &empty_value));
 
         html! {
             <div class="el-descriptions">

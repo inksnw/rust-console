@@ -60,8 +60,8 @@ impl NameSpaceSelect {
         let empty_value = Value::String(String::new());
         let nsdata = self.ns_list.iter().
             map(|item| ValueText {
-                value: utils::get_json_value("metadata.name", item, &empty_value),
-                text: utils::get_json_value("metadata.name", item, &empty_value),
+                value: utils::value2string(utils::get_json_value("metadata.name", item, &empty_value)),
+                text: utils::value2string(utils::get_json_value("metadata.name", item, &empty_value)),
             }).collect::<Vec<ValueText>>();
         html! {
         <ElSelect data={nsdata} onchange={ctx.link().callback(NamespaceMsg::Onchange)} />
