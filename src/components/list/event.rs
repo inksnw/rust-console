@@ -41,6 +41,7 @@ impl Component for Event {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
+        let history = ctx.link().history().unwrap();
         html!(
             <div>
 
@@ -53,7 +54,7 @@ impl Component for Event {
             </li>
             </ul>
            <div>
-            <ElTable width={"100%"} data={self.pods.clone()}>
+            <ElTable width={"100%"} data={self.pods.clone()}  history={history}>
             <ElTableColumn label="时间" prop="firstTimestamp" width="200"/>
             <ElTableColumn label="类型" prop="type"/>
             <ElTableColumn label="消息" prop="message" width="200"/>

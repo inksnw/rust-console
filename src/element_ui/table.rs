@@ -4,7 +4,9 @@ use yew::{html, Properties};
 use yew::html::ChildrenRenderer;
 use yew::prelude::*;
 use yew::virtual_dom::VChild;
+use yew_router::prelude::*;
 
+use crate::helper::router::Route;
 use crate::helper::utils;
 
 pub struct ElTable {}
@@ -19,6 +21,7 @@ pub struct TableProps {
     pub children: ChildrenWithProps<ElTableColumn>,
     #[prop_or_default]
     pub data: Vec<Value>,
+    pub history: AnyHistory,
 
 }
 
@@ -91,21 +94,19 @@ impl ElTable {
                     <tr class="el-table__row">
                     {
                         ctx.props().children.iter().enumerate().map(|(_i,item)|{
-                        self.render_cell(row,item.props.children.clone(),item.props.prop.clone())
+                        self.render_cell(row,item.props.children.clone(),item.props.prop.clone(),  ctx.props().history.clone())
                         }).collect::<Html>()
                     }
                     </tr>}
         }).collect::<Html>()
     }
-    fn render_cell(&self, row: &Value, children: ChildrenRenderer<VChild<ElTableLink>>, query: String) -> Html {
+    fn render_cell(&self, row: &Value, children: ChildrenRenderer<VChild<ElTableLink>>, query: String, history: AnyHistory) -> Html {
+        let onclick = Callback::once(move |_| history.push(Route::Home));
+
         let empty_value = Value::String(String::new());
-        let value = utils::get_json_value(&query, row, &empty_value);
+        let value = utils::value2string(utils::get_json_value(&query, row, &empty_value));
         //todo 解决非string类型渲染
 
-        let namespace = utils::value2string(utils::get_json_value("metadata.namespace", row, &empty_value));
-        let kind = utils::value2string(utils::get_json_value("kind", row, &empty_value));
-        let url = if namespace == "" { format!("{}/{}", kind, value) } else { format!("{}/{}/{}", kind, namespace, value) };
-        //todo 把a标签换成link,确保单页应用
         if !children.is_empty() {
             html!(
             <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
@@ -127,7 +128,7 @@ impl ElTable {
             <td rowspan="1" colspan="1" class="el-table_2_column_6   el-table__cell">
             <div class="cell">
              if query=="metadata.name"{
-                     <a href={ url }> {value} </a>
+                     <a href={ "javascript:;" } onclick={onclick}> {value} </a>
                 }else{
                     {value}
                 }

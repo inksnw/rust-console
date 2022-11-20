@@ -1,5 +1,6 @@
 use yew::{Context, Html, html};
 use yew::prelude::Component;
+use yew_router::prelude::RouterScopeExt;
 
 use crate::apis::apiv1::{load_ns_future, NamespaceMsg};
 use crate::element_ui::table::{ElTable, ElTableColumn};
@@ -34,11 +35,12 @@ impl Component for Nodes {
         true
     }
 
-    fn view(&self, _ctx: &Context<Self>) -> Html {
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        let history = ctx.link().history().unwrap();
         html!(
             <div>
 
-            <ElTable width={"100%"} data={self.nodes.clone()}>
+            <ElTable width={"100%"} data={self.nodes.clone()} history={history}>
             <ElTableColumn label="名称" prop="metadata.name" width="100"/>
             <ElTableColumn label="IP" prop="status.addresses.0.address" width="120"/>
             <ElTableColumn label="cpu" prop="status.capacity.cpu" width="100"/>

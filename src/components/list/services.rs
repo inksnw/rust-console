@@ -1,6 +1,7 @@
 use serde_json::Value;
 use yew::{Context, Html, html};
 use yew::prelude::Component;
+use yew_router::prelude::RouterScopeExt;
 use yew_router::scope_ext::HistoryHandle;
 
 use crate::apis::app::AppMsg;
@@ -68,10 +69,11 @@ impl Component for Services {
         let total_pages = (self.total_items() + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
         let total_pages = if total_pages == 0 { 1 } else { total_pages };
 
+        let history = ctx.link().history().unwrap();
         html! {
             <div>
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
-            <ElTable width={"100%"} data={self.data.clone()}>
+            <ElTable width={"100%"} data={self.data.clone()} history={history}>
             <ElTableColumn label="名称" prop="metadata.name" width="200"/>
             <ElTableColumn label="创建时间" prop="metadata.creationTimestamp" width="200"/>
             <ElTableColumn label="父级类型" prop="metadata.ownerReferences.0.kind" width="200"/>
