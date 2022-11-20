@@ -74,7 +74,8 @@ impl Component for DaemonSets {
               {base::render_workload_nav("daemonsets".to_string())}
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.data.clone()}>
-            <ElTableColumn label="名称" prop="metadata.name" width="200"/>
+               <ElTableColumn label="名称" prop="metadata.name" width="200"/>
+            <ElTableColumn label="名称空间" prop="metadata.namespace" width="200"/>
             <ElTableColumn label="创建时间" prop="metadata.creationTimestamp" width="200"/>
              <ElTableColumn label="操作">
                 <ElTableLink href={"/a?name=$1&ns=$2"} params={vec!("metadata.name","metadata.namespace")} label="删除"/>

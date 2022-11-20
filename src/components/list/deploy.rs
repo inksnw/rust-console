@@ -74,7 +74,7 @@ impl Component for Deploy {
             {base::render_workload_nav("deploy".to_string())}
             <NameSpaceSelect onchange={ctx.link().callback(AppMsg::UpdateNs)} />
             <ElTable width={"100%"} data={self.data.clone()}>
-             <ElTableColumn label="名称" prop="metadata.name" width="200"/>
+            <ElTableColumn label="名称" prop="metadata.name" width="200"/>
             <ElTableColumn label="名称空间" prop="metadata.namespace" width="200"/>
             <ElTableColumn label="创建时间" prop="metadata.creationTimestamp" width="200"/>
             <ElTableColumn label="父级类型" prop="metadata.ownerReferences.0.kind" width="200"/>

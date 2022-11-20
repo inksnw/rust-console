@@ -74,6 +74,11 @@ impl Component for Services {
             <ElTable width={"100%"} data={self.data.clone()}>
             <ElTableColumn label="名称" prop="metadata.name" width="200"/>
             <ElTableColumn label="创建时间" prop="metadata.creationTimestamp" width="200"/>
+            <ElTableColumn label="父级类型" prop="metadata.ownerReferences.0.kind" width="200"/>
+            <ElTableColumn label="父级名称" prop="metadata.ownerReferences.0.name" width="200"/>
+              <ElTableColumn label="clusterIP" prop="spec.clusterIP" width="200"/>
+              <ElTableColumn label="ports" prop="spec.ports.0.port" width="200"/>
+              <ElTableColumn label="type" prop="spec.type" width="200"/>
              <ElTableColumn label="操作">
                 <ElTableLink href={"/a?name=$1&ns=$2"} params={vec!("metadata.name","metadata.namespace")} label="删除"/>
             </ElTableColumn>
