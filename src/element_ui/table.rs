@@ -6,7 +6,8 @@ use yew::prelude::*;
 use yew::virtual_dom::VChild;
 use yew_router::prelude::*;
 
-use crate::helper::router::Route;
+use crate::helper::address::get_route;
+
 use crate::helper::utils;
 
 pub struct ElTable {}
@@ -101,11 +102,16 @@ impl ElTable {
         }).collect::<Html>()
     }
     fn render_cell(&self, row: &Value, children: ChildrenRenderer<VChild<ElTableLink>>, query: String, history: AnyHistory) -> Html {
-        let onclick = Callback::once(move |_| history.push(Route::Home));
-
         let empty_value = Value::String(String::new());
         let value = utils::value2string(utils::get_json_value(&query, row, &empty_value));
         //todo 解决非string类型渲染
+
+        let namespace = utils::value2string(utils::get_json_value("metadata.namespace", row, &empty_value));
+        let kind = utils::value2string(utils::get_json_value("kind", row, &empty_value));
+        let name = utils::value2string(utils::get_json_value("metadata.name", row, &empty_value));
+
+        let route = get_route(kind, name, namespace);
+        let onclick = Callback::once(move |_| history.push(route));
 
         if !children.is_empty() {
             html!(
