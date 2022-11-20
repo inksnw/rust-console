@@ -50,7 +50,7 @@ impl Component for ElSelect {
         let arrow = if self.show { "el-icon-arrow-down" } else { "el-icon-arrow-up" };
 
         html! {
-            <div class="el-select">
+            <div class="el-select"  >
              <div class="el-input el-input--suffix ">
              <input type="text" readonly=true autocomplete="off"
                placeholder="全部名称空间" value={self.vt.text.clone()}

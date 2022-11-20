@@ -3,6 +3,7 @@ use yew::prelude::*;
 use yew::Properties;
 
 use crate::apis::apiv1::*;
+use crate::element_ui::ElButton;
 use crate::element_ui::select::ElSelect;
 use crate::element_ui::ValueText;
 use crate::helper::utils;
@@ -64,7 +65,14 @@ impl NameSpaceSelect {
                 text: utils::value2string(utils::get_json_value("metadata.name", item, &empty_value)),
             }).collect::<Vec<ValueText>>();
         html! {
-        <ElSelect data={nsdata} onchange={ctx.link().callback(NamespaceMsg::Onchange)} />
+            <div>
+            <div style="display:inline;">
+            <ElSelect data={nsdata} onchange={ctx.link().callback(NamespaceMsg::Onchange)} />
+            </div>
+            <div  style="display:inline;float: right;">
+             <ElButton value={"创建"} button_type={"primary"}/>
+            </div>
+            </div>
       }
     }
 }
