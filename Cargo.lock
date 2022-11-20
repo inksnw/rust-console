@@ -582,6 +582,7 @@ version = "0.1.0"
 dependencies = [
  "futures",
  "gloo-net 0.2.4",
+ "gloo-utils",
  "log",
  "reqwasm",
  "serde",

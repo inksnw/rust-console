@@ -7,7 +7,6 @@ use yew::virtual_dom::VChild;
 use yew_router::prelude::*;
 
 use crate::helper::address::get_route;
-
 use crate::helper::utils;
 
 pub struct ElTable {}

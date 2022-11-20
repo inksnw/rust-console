@@ -11,6 +11,7 @@ use crate::components::list::base::Updatable;
 use crate::components::selectns::NameSpaceSelect;
 use crate::element_ui::table::{ElTable, ElTableColumn, ElTableLink};
 use crate::helper::event_bus::EventBus;
+use crate::helper::message::success;
 use crate::helper::pagination::Pagination;
 use crate::helper::router::Route;
 
@@ -71,6 +72,8 @@ impl Component for Deploy {
         let total_pages = (self.total_items() + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
         let total_pages = if total_pages == 0 { 1 } else { total_pages };
         let history = ctx.link().history().unwrap();
+        let mm = "hello".to_string();
+        success(&mm);
         html!(
             <div>
             {modal()}

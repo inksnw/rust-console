@@ -3,30 +3,27 @@
 use uuid::Uuid;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::prelude::*;
+use yew::{create_portal, html};
 
-use super::js::{create_element, get_body, get_by_id};
-
-// 弹出成功消息框
+// 弹出消息框
 fn message(msg_type: &str, msg: &str) {
-    let body = get_body().unwrap();
-    // msg_type info 、success、warning、error 四种
-    let div = create_element("div").expect("create div error");
+    let div = gloo_utils::document().create_element("div").expect("create div error");
     let div_class_name = format!("el-message is-closable el-message--{}", msg_type);
     let div_id = Uuid::new_v4();
     div.set_id(div_id.to_string().as_str());
     div.set_class_name(div_class_name.as_str());
     div.set_attribute("style", "top: 20px; z-index: 2020;").expect("style set error");
 
-    let i1 = create_element("i").expect("create i error");
+    let i1 = gloo_utils::document().create_element("i").expect("create i error");
     let i1_class_name = format!("el-message__icon el-icon-{}", msg_type);
     i1.set_class_name(i1_class_name.as_str());
 
-    let text = create_element("p").expect("create p error");
+    let text = gloo_utils::document().create_element("p").expect("create p error");
     text.set_class_name("el-message__content");
-    text.set_inner_text(msg);
+    text.set_inner_html(msg);
 
-    let i2 = create_element("i").expect("create i error");
-    i2.set_class_name("el-message__closeBtn el-icon-close");  //这个 i 可以设置关闭事件 
+    let i2 = gloo_utils::document().create_element("i").expect("create i error");
+    i2.set_class_name("el-message__closeBtn el-icon-close");  //这个 i 可以设置关闭事件
     i2.set_attribute("role", div_id.to_string().as_str()).expect("i2 set role error");
 
     let close_func = Closure::wrap(Box::new(|e: web_sys::Event| {
@@ -36,9 +33,9 @@ fn message(msg_type: &str, msg: &str) {
             .dyn_into::<web_sys::HtmlElement>()
             .unwrap().get_attribute("role").unwrap();
 
-        let get_child = get_by_id(&get_id).unwrap();
+        let get_child = gloo_utils::document().get_element_by_id(&get_id).unwrap();
 
-        get_body().unwrap().remove_child(&get_child.dyn_into::<web_sys::Node>().
+        gloo_utils::document().body().unwrap().remove_child(&get_child.dyn_into::<web_sys::Node>().
             unwrap()).unwrap();
     }) as Box<dyn FnMut(_)>);
 
@@ -51,6 +48,7 @@ fn message(msg_type: &str, msg: &str) {
     div.append_child(&text).expect("append error text");
     div.append_child(&i2).expect("append error i2");
 
+    let body = gloo_utils::document().body().unwrap();
     body.append_child(&div).unwrap();
 }
 
