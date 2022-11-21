@@ -3,7 +3,6 @@
 use uuid::Uuid;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::prelude::*;
-use yew::{create_portal, html};
 
 // 弹出消息框
 fn message(msg_type: &str, msg: &str) {

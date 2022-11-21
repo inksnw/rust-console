@@ -5,3 +5,4 @@ pub mod pagination;
 pub mod websocket;
 pub mod event_bus;
 pub mod address;
+pub mod modal;

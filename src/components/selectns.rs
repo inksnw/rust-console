@@ -69,8 +69,8 @@ impl NameSpaceSelect {
             <div style="display:inline;">
             <ElSelect data={nsdata} onchange={ctx.link().callback(NamespaceMsg::Onchange)} />
             </div>
-            <div  style="display:inline;float: right;">
-             <ElButton value={"创建"} button_type={"primary"}/>
+            <div  style="display:inline;float:right;">
+            <ElButton value={"创建"} button_type={"primary"}/>
             </div>
             </div>
       }

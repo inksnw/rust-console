@@ -8,11 +8,11 @@ pub struct ElButtonProps {
     #[prop_or(false)]
     pub disabled: bool,
     #[prop_or("default")]
-    pub button_type: &'static str,   // 和elementui 一样 ， primary / success / warning / danger / info / text
-
+    pub button_type: &'static str,
+    // 和elementui 一样 ， primary / success / warning / danger / info / text
     #[prop_or("button")]
-    pub native_type: &'static str,  // button / submit / reset  默认是button
-
+    pub native_type: &'static str,
+    // button / submit / reset  默认是button
     #[prop_or_default]
     pub onclick: Option<Callback<MouseEvent>>,
 }
