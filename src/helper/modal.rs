@@ -44,7 +44,7 @@ impl Modal {
     fn create_box(&self, ctx: &Context<Self>, visible_style: String) -> Html {
         // display: none;
         html!(
-            <div class="el-dialog__wrapper" style="z-index: 2254;">
+            <div class="el-dialog__wrapper" style="z-index: 2254;        display: none;">
                 <div role="dialog" aria-modal="true" aria-label="收货地址" class="el-dialog" style="margin-top: 15vh;">
                     <div class="el-dialog__header"><span class="el-dialog__title">{"收货地址"}</span>
                         <button type="button" aria-label="Close" class="el-dialog__headerbtn"><i

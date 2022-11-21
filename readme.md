@@ -11,5 +11,9 @@
 ```bash
 trunk serve
 ```
-
+- [x] websocket
+- [x] 分页
+- [x] 标签页切换
+- [x] history push 跳转
+- [ ] 模态框
 
